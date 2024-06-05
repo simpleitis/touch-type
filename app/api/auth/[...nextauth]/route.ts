@@ -22,7 +22,7 @@ const handler = NextAuth({
         // You can also use the `req` object to obtain additional parameters
         // (i.e., the request IP address)
 
-        const registeredUser = createUser(credentials);
+        const registeredUser = checkIfRegistered(credentials);
 
         // If no error and we have user data, return it
         if (!!registeredUser) {
