@@ -1,7 +1,4 @@
-import {
-  checkIfRegistered,
-  createUser,
-} from "@/app/authHelpers/credentialLogin";
+import { checkIfRegistered, createUser } from "@/app/helpers/authHelpers";
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
@@ -36,6 +33,13 @@ const handler = NextAuth({
   session: {
     strategy: "jwt",
     maxAge: 1 * 24 * 60 * 60,
+  },
+  pages: {
+    signIn: "/auth/login",
+    signOut: "/auth/signout",
+    error: "/auth/error", // Error code passed in query string as ?error=
+    verifyRequest: "/auth/verify-request", // (used for check email message)
+    newUser: "/auth/new-user", // New users will be directed here on first sign in (leave the property out if not of interest)
   },
 });
 

@@ -1,7 +1,7 @@
-import { prisma } from "../db";
+import { prisma } from '../db';
 
 export const checkIfRegistered = async (
-  credentials: Record<"email" | "password", string> | undefined
+  credentials: Record<'email' | 'password', string> | undefined
 ) => {
   const user = await prisma.user.findUnique({
     where: {
@@ -18,14 +18,14 @@ export const checkIfRegistered = async (
 };
 
 export const createUser = async (
-  credentials: Record<"email" | "password", string> | undefined
+  credentials: Record<'email' | 'password', string> | undefined
 ) => {
   if (credentials?.email && credentials?.password) {
     const user = await prisma.user.create({
       data: {
         email: credentials?.email,
         password: credentials?.password,
-        name: "Amar",
+        name: 'Amar',
       },
     });
 
