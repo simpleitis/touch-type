@@ -1,6 +1,7 @@
 import { checkIfRegistered, createUser } from "@/app/helpers/authHelpers";
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import { z } from 'zod';
 
 const handler = NextAuth({
   providers: [
@@ -18,14 +19,18 @@ const handler = NextAuth({
       async authorize(credentials, req) {
         // You can also use the `req` object to obtain additional parameters
         // (i.e., the request IP address)
+        const parsedCredentials = z
+          .object({ email: z.string().email(), password: z.string().min(6) })
+          .safeParse(credentials);
 
-        const registeredUser = checkIfRegistered(credentials);
+        if (parsedCredentials.success) {
+          const registeredUser = checkIfRegistered(credentials);
 
-        // If no error and we have user data, return it
-        if (!!registeredUser) {
-          return registeredUser;
+          if (!!registeredUser) {
+            return registeredUser;
+          }
         }
-        // Return null if user data could not be retrieved
+        
         return null;
       },
     }),

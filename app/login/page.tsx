@@ -12,7 +12,7 @@ const page = () => {
       </form>
 
       <div className='padding-5 w-max border p-2'>
-        <Link href='/auth/register'>Register page</Link>
+        <Link href='/register'>Register page</Link>
       </div>
     </div>
   );

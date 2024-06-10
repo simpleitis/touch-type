@@ -1,8 +1,10 @@
 import { prisma } from '../db';
+import bcrypt from 'bcrypt';
 
 export const checkIfRegistered = async (
   credentials: Record<'email' | 'password', string> | undefined
 ) => {
+  
   const user = await prisma.user.findUnique({
     where: {
       email: credentials?.email,
@@ -10,8 +12,11 @@ export const checkIfRegistered = async (
     },
   });
 
-  if (!!user && user.id) {
-    return { ...user, id: user.id.toString() };
+  if (user?.password) {
+    const isMatch = await bcrypt.compare(credentials?.password!, user?.password);
+    if (isMatch) {
+      return { id: user.id.toString(), email: user.email, name: user.name };
+    }
   }
 
   return null;
@@ -35,4 +40,10 @@ export const createUser = async (
   }
 
   return null;
+};
+
+export const hashPassword = async (password: string) => {
+  const saltRounds = 10;
+  const hashedPassword = await bcrypt.hash(password, saltRounds);
+  return hashedPassword;
 };

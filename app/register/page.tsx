@@ -86,7 +86,7 @@ const Page = () => {
       </form>
 
       <div className="padding-5 w-max p-2 underline">
-        <Link href="/auth/login">Go to login page</Link>
+        <Link href="/login">Go to login page</Link>
       </div>
     </div>
   );
