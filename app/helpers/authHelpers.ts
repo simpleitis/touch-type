@@ -1,36 +1,26 @@
-import { prisma } from '../db';
-import bcrypt from 'bcrypt';
+import { prisma } from "../db";
+import bcrypt from "bcrypt";
 
-export const checkIfRegistered = async (
-  credentials: Record<'email' | 'password', string> | undefined
-) => {
-  
+export const checkIfRegistered = async (email: string) => {
   const user = await prisma.user.findUnique({
     where: {
-      email: credentials?.email,
-      password: credentials?.password,
+      email: email,
     },
   });
 
-  if (user?.password) {
-    const isMatch = await bcrypt.compare(credentials?.password!, user?.password);
-    if (isMatch) {
-      return { id: user.id.toString(), email: user.email, name: user.name };
-    }
-  }
-
-  return null;
+  return user;
 };
 
 export const createUser = async (
-  credentials: Record<'email' | 'password', string> | undefined
+  credentials: Record<"email" | "password", string> | undefined,
 ) => {
   if (credentials?.email && credentials?.password) {
+    const hashedPassword = await hashPassword(credentials.password);
     const user = await prisma.user.create({
       data: {
-        email: credentials?.email,
-        password: credentials?.password,
-        name: 'Amar',
+        email: credentials.email,
+        password: hashedPassword,
+        name: "Amar",
       },
     });
 
