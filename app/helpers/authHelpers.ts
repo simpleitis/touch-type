@@ -1,4 +1,4 @@
-import { prisma } from "../db";
+import { prisma } from "../../utils/db";
 import bcrypt from "bcrypt";
 
 export const checkIfRegistered = async (email: string) => {
