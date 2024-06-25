@@ -1,35 +1,48 @@
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
-// Your own logic for dealing with plaintext password strings; be careful!
+import { comparePassword } from "./app/helpers/authHelpers";
+import { signInSchema } from "./lib/zod";
+import { prisma } from "./utils/db";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
     Credentials({
-      // You can specify which fields should be submitted, by adding keys to the `credentials` object.
-      // e.g. domain, username, password, 2FA token, etc.
       credentials: {
         email: {},
         password: {},
       },
       authorize: async (credentials) => {
-        let user = null;
-        console.log(credentials);
+        try {
+          const { email, password } =
+            await signInSchema.parseAsync(credentials);
 
-        // logic to salt and hash password
-        // const pwHash = saltAndHashPassword(credentials.password);
+          const user = await prisma.user.findUnique({
+            where: {
+              email: email,
+            },
+          });
 
-        // logic to verify if user exists
-        // user = await getUserFromDb(credentials.email, pwHash);
+          if (!user) {
+            throw new Error("User not found.");
+          }
 
-        // if (!user) {
-        //   // No user found, so this is their first attempt to login
-        //   // meaning this is also the place you could do registration
-        //   throw new Error("User not found.");
-        // }
+          let passwordMatch;
+          if (user?.password) {
+            passwordMatch = await comparePassword(password, user.password);
+          }
 
-        // return user object with the their profile data
-        return { email: "a@gmail.com", password: "asdfasdfasdf" };
+          if (passwordMatch) {
+            return { email: user.email };
+          } else {
+            return null;
+          }
+        } catch (error) {
+          return null;
+        }
       },
     }),
   ],
+  pages: {
+    signIn: "/login",
+  },
 });
