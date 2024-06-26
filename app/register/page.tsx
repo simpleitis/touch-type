@@ -1,95 +1,91 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { FormEvent } from "react";
 
-const Page = () => {
-  const [registerData, setRegisterData] = useState({
-    name: "",
-    email: "",
-    password: "",
-  });
-
+const RegistrationForm = () => {
   const router = useRouter();
 
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setRegisterData({ ...registerData, [e.target.name]: e.target.value });
-  };
-
-  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
 
     try {
-      const response = await fetch("/api/auth/register", {
+      const formData = new FormData(event.currentTarget);
+
+      const name = formData.get("name");
+      const email = formData.get("email");
+      const password = formData.get("password");
+
+      const response = await fetch(`/api/register`, {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
+          "content-type": "application/json",
         },
-        body: JSON.stringify(registerData),
+        body: JSON.stringify({
+          name,
+          email,
+          password,
+        }),
       });
 
-      const data = await response.json();
-      console.log("Data: ", data);
-
-      if (response.ok) {
-        router.push("/login");
-      }
-    } catch (error) {
-      console.error("Error during registration:", error);
+      response.status === 201 && router.push("/");
+    } catch (e: any) {
+      console.error(e.message);
     }
-  };
+  }
 
   return (
-    <div className="flex flex-col items-center justify-center gap-10">
-      <p className="text-9xl font-extrabold">Register page</p>
-
-      <form className="flex flex-col gap-4" onSubmit={(e) => onSubmit(e)}>
-        <div className="flex flex-col gap-2">
-          <label htmlFor="name">Name</label>
+    <div className="flex h-screen flex-col items-center justify-center text-2xl">
+      <p className="text-5xl font-bold">Register page</p>
+      <form
+        onSubmit={handleSubmit}
+        className="my-5 flex flex-col items-center rounded-md p-3"
+      >
+        <div className="my-2 flex flex-col">
+          <label htmlFor="email">Name</label>
           <input
-            className="text-black"
-            name="name"
+            className="rounded border border-gray-500"
             type="text"
-            required
-            onChange={onChange}
+            name="name"
+            id="name"
           />
         </div>
-
-        <div className="flex flex-col gap-2">
-          <label htmlFor="email">Email</label>
+        <div className="my-2 flex flex-col">
+          <label htmlFor="email">Email Address</label>
           <input
-            className="text-black"
-            name="email"
+            className="rounded border border-gray-500"
             type="email"
-            required
-            onChange={onChange}
+            name="email"
+            id="email"
           />
         </div>
 
-        <div className="flex flex-col gap-2">
+        <div className="my-2 flex flex-col">
           <label htmlFor="password">Password</label>
           <input
-            className="text-black"
-            name="password"
+            className="rounded border border-gray-500"
             type="password"
-            required
-            onChange={onChange}
+            name="password"
+            id="password"
           />
         </div>
+
         <button
-          className="mt-2 self-center rounded-xl border-2 p-2"
           type="submit"
+          className="mt-4 flex w-36 items-center justify-center rounded bg-orange-300"
         >
-          Create account
+          Register
         </button>
       </form>
-
-      <div className="padding-5 w-max p-2 underline">
-        <Link href="/login">Go to login page</Link>
-      </div>
+      <p>
+        Already have an account?
+        <Link href={"/login"}>
+          <span className="underline">Login</span>
+        </Link>
+      </p>
     </div>
   );
 };
 
-export default Page;
+export default RegistrationForm;
