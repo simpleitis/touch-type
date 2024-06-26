@@ -8,6 +8,7 @@ import Link from "next/link";
 
 const LoginForm = () => {
   const router = useRouter();
+
   const [error, setError] = useState("");
 
   const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -18,11 +19,8 @@ const LoginForm = () => {
 
       const response = await login(formData);
 
-      if (!!response.error) {
-        console.error(response.error);
-        setError(response.error.message);
-      } else {
-        router.push("/home");
+      if (response) {
+        router.push("/");
       }
     } catch (e) {
       console.error(e);
@@ -36,7 +34,7 @@ const LoginForm = () => {
       <div className="text-xl text-red-500">{error}</div>
       <form
         className="my-5 flex flex-col items-center rounded-md p-3"
-        onSubmit={(e) => onSubmit}
+        onSubmit={onSubmit}
       >
         <div className="my-2 flex flex-col">
           <label htmlFor="email">Email Address</label>
