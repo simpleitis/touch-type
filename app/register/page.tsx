@@ -2,11 +2,13 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { FormEvent } from "react";
+import { FormEvent, useState } from "react";
 import { register } from "../actions/authentication";
 
 const RegistrationForm = () => {
   const router = useRouter();
+
+  const [error, setError] = useState("");
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -15,10 +17,13 @@ const RegistrationForm = () => {
       const formData = new FormData(event.currentTarget);
 
       const res = await register(formData);
-      if (res?.success) {
+      if (res.success) {
         router.push("/login");
+      } else {
+        setError("Enter valid data");
       }
     } catch (e: any) {
+      setError("Something went wrong!");
       console.error(e.message);
     }
   }
@@ -30,6 +35,7 @@ const RegistrationForm = () => {
         onSubmit={handleSubmit}
         className="my-5 flex flex-col items-center rounded-md p-3"
       >
+        <div className={`h-10 text-xl text-red-500`}>{error}</div>
         <div className="my-2 flex flex-col">
           <label htmlFor="name">Name</label>
           <input

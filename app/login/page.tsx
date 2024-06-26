@@ -21,21 +21,23 @@ const LoginForm = () => {
 
       if (response) {
         router.push("/");
+      } else {
+        setError("Check you credentials!");
       }
     } catch (e) {
       console.error(e);
-      setError("Check your Credentials");
+      setError("Something went wrong!");
     }
   };
 
   return (
     <div className="flex h-screen flex-col items-center justify-center text-2xl">
       <p className="text-5xl font-bold">Login page</p>
-      <div className="text-xl text-red-500">{error}</div>
       <form
         className="my-5 flex flex-col items-center rounded-md p-3"
         onSubmit={onSubmit}
       >
+        <div className={`h-10 text-xl text-red-500`}>{error}</div>
         <div className="my-2 flex flex-col">
           <label htmlFor="email">Email Address</label>
           <input

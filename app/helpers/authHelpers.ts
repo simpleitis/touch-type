@@ -1,28 +1,4 @@
-import { prisma } from "../../utils/db";
 import bcrypt from "bcrypt";
-
-export const createUser = async (
-  credentials: Record<"email" | "password", string> | undefined,
-) => {
-  if (credentials?.email && credentials?.password) {
-    const hashedPassword = await hashPassword(credentials.password);
-    console.log("Hashed password: ", hashedPassword);
-    const user = await prisma.user.create({
-      data: {
-        email: credentials.email,
-        password: hashedPassword,
-        name: "Amar",
-      },
-    });
-
-    if (!!user) {
-      console.log("Created user: ", user);
-      return user;
-    }
-  }
-
-  return null;
-};
 
 export const hashPassword = async (password: string) => {
   const saltRounds = 10;
