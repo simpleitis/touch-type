@@ -10,7 +10,7 @@ const LoginForm = () => {
   const router = useRouter();
   const [error, setError] = useState("");
 
-  async function onSubmit(event: FormEvent<HTMLFormElement>) {
+  const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     try {
@@ -28,7 +28,7 @@ const LoginForm = () => {
       console.error(e);
       setError("Check your Credentials");
     }
-  }
+  };
 
   return (
     <div className="flex h-screen flex-col items-center justify-center text-2xl">
