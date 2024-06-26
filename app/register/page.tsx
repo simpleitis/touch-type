@@ -43,7 +43,7 @@ const RegistrationForm = () => {
         className="my-5 flex flex-col items-center rounded-md p-3"
       >
         <div className="my-2 flex flex-col">
-          <label htmlFor="email">Name</label>
+          <label htmlFor="name">Name</label>
           <input
             className="rounded border border-gray-500"
             type="text"
