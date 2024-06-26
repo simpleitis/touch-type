@@ -23,7 +23,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           });
 
           if (!user) {
-            throw new Error("User not found.");
+            return null;
           }
 
           let passwordMatch;
