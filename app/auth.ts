@@ -1,8 +1,8 @@
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
-import { comparePassword } from "./app/helpers/authHelpers";
-import { signInSchema } from "./lib/zod";
-import { prisma } from "./utils/db";
+import { comparePassword } from "./helpers/authHelpers";
+import { signInSchema } from "../lib/zod";
+import { prisma } from "../utils/db";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [

@@ -1,6 +1,6 @@
 "use server";
 
-import { signIn } from "@/auth";
+import { signIn } from "../auth";
 import { prisma } from "@/utils/db";
 import { hashPassword } from "../helpers/authHelpers";
 
