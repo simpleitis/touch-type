@@ -14,23 +14,10 @@ const RegistrationForm = () => {
     try {
       const formData = new FormData(event.currentTarget);
 
-      const name = formData.get("name");
-      const email = formData.get("email");
-      const password = formData.get("password");
-
-      const response = await fetch(`/api/register`, {
-        method: "POST",
-        headers: {
-          "content-type": "application/json",
-        },
-        body: JSON.stringify({
-          name,
-          email,
-          password,
-        }),
-      });
-
-      response.status === 201 && router.push("/");
+      const res = await register(formData);
+      if (res?.success) {
+        router.push("/login");
+      }
     } catch (e: any) {
       console.error(e.message);
     }
@@ -40,8 +27,7 @@ const RegistrationForm = () => {
     <div className="flex h-screen flex-col items-center justify-center text-2xl">
       <p className="text-5xl font-bold">Register page</p>
       <form
-        // onSubmit={handleSubmit}
-        action={register}
+        onSubmit={handleSubmit}
         className="my-5 flex flex-col items-center rounded-md p-3"
       >
         <div className="my-2 flex flex-col">
