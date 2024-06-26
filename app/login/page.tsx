@@ -41,7 +41,7 @@ const LoginForm = () => {
         <div className="my-2 flex flex-col">
           <label htmlFor="email">Email Address</label>
           <input
-            className="rounded border border-gray-500"
+            className="rounded border border-gray-500 text-black"
             type="email"
             name="email"
             id="email"
@@ -51,7 +51,7 @@ const LoginForm = () => {
         <div className="my-2 flex flex-col">
           <label htmlFor="password">Password</label>
           <input
-            className="rounded border border-gray-500"
+            className="rounded border border-gray-500 text-black"
             type="password"
             name="password"
             id="password"

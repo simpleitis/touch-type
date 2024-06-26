@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FormEvent } from "react";
+import { register } from "../actions/authentication";
 
 const RegistrationForm = () => {
   const router = useRouter();
@@ -39,13 +40,14 @@ const RegistrationForm = () => {
     <div className="flex h-screen flex-col items-center justify-center text-2xl">
       <p className="text-5xl font-bold">Register page</p>
       <form
-        onSubmit={handleSubmit}
+        // onSubmit={handleSubmit}
+        action={register}
         className="my-5 flex flex-col items-center rounded-md p-3"
       >
         <div className="my-2 flex flex-col">
           <label htmlFor="name">Name</label>
           <input
-            className="rounded border border-gray-500"
+            className="rounded border border-gray-500 text-black"
             type="text"
             name="name"
             id="name"
@@ -54,7 +56,7 @@ const RegistrationForm = () => {
         <div className="my-2 flex flex-col">
           <label htmlFor="email">Email Address</label>
           <input
-            className="rounded border border-gray-500"
+            className="rounded border border-gray-500 text-black"
             type="email"
             name="email"
             id="email"
@@ -64,7 +66,7 @@ const RegistrationForm = () => {
         <div className="my-2 flex flex-col">
           <label htmlFor="password">Password</label>
           <input
-            className="rounded border border-gray-500"
+            className="rounded border border-gray-500 text-black"
             type="password"
             name="password"
             id="password"
