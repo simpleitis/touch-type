@@ -1,16 +1,6 @@
 import { prisma } from "../../utils/db";
 import bcrypt from "bcrypt";
 
-export const checkIfRegistered = async (email: string) => {
-  const user = await prisma.user.findUnique({
-    where: {
-      email: email,
-    },
-  });
-
-  return user;
-};
-
 export const createUser = async (
   credentials: Record<"email" | "password", string> | undefined,
 ) => {
