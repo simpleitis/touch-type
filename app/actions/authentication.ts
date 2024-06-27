@@ -3,20 +3,27 @@
 import { signIn } from "../auth";
 import { prisma } from "@/utils/db";
 import { hashPassword } from "../helpers/authHelpers";
+import { signInSchema, signUpSchema } from "@/lib/zod";
 
 export const register = async (formData: FormData) => {
-  const name = formData.get("name");
-  const email = formData.get("email");
-  const password = formData.get("password");
+  const formName = formData.get("name");
+  const formEmail = formData.get("email");
+  const formPassword = formData.get("password");
 
-  const hashedPassword = await hashPassword(String(password));
+  const { email, password, name } = await signUpSchema.parseAsync({
+    email: formEmail,
+    password: formPassword,
+    name: formName,
+  });
+
+  const hashedPassword = await hashPassword(password);
 
   try {
     const dbRes = await prisma.user.create({
       data: {
-        email: String(email),
-        password: String(hashedPassword),
-        name: String(name),
+        email: email,
+        password: hashedPassword,
+        name: name,
       },
     });
 
@@ -32,8 +39,13 @@ export const register = async (formData: FormData) => {
 };
 
 export const login = async (formData: FormData) => {
-  const email = formData.get("email");
-  const password = formData.get("password");
+  const formEmail = formData.get("email");
+  const formPassword = formData.get("password");
+
+  const { email, password } = await signInSchema.parseAsync({
+    email: formEmail,
+    password: formPassword,
+  });
 
   try {
     const res = await signIn("credentials", {
