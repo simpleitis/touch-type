@@ -4,9 +4,10 @@ export const signInSchema = object({
   parsedEmail: string({ required_error: "Email is required" })
     .min(1, "Email is required")
     .email("Invalid email"),
-  parsedPassword: string({ required_error: "Password is required" })
-    .min(8, "Please enter a valid password")
-    .max(32, "Please enter a valid password"),
+  parsedPassword: string({ required_error: "Password is required" }).min(
+    1,
+    "Please enter a valid password",
+  ),
 });
 
 export const signUpSchema = object({
