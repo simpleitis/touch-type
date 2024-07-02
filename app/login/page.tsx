@@ -1,10 +1,11 @@
 "use client";
 
 import { login } from "../actions/authentication";
-
 import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { signInSchema } from "@/lib/zod";
+import { toast } from "react-toastify";
 
 const LoginForm = () => {
   const router = useRouter();
@@ -14,19 +15,38 @@ const LoginForm = () => {
   const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
+    const formData = new FormData(event.currentTarget);
+    const formEmail = formData.get("email");
+    const formPassword = formData.get("password");
+
     try {
-      const formData = new FormData(event.currentTarget);
+      const { parsedEmail, parsedPassword } = await signInSchema.parseAsync({
+        parsedEmail: formEmail,
+        parsedPassword: formPassword,
+      });
 
-      const response = await login(formData);
+      const res = await login({
+        email: parsedEmail,
+        password: parsedPassword,
+      });
 
-      if (response) {
+      if (!res?.success && res?.redirect) {
+        toast.warning("Please create an account! \n Redirecting in 3s");
+        setTimeout(() => {
+          router.push("/register");
+        }, 3200);
+      } else if (res?.success) {
         router.push("/");
-      } else {
-        setError("Check you credentials!");
+      } else if (!res?.success && res?.message) {
+        setError(res.message);
       }
-    } catch (e) {
-      console.error(e);
-      setError("Something went wrong!");
+    } catch (err: any) {
+      if (err.name == "ZodError") {
+        setError(`${err.issues[0]?.message}!`);
+      } else {
+        console.error("Error: ", err);
+        setError("Something went wrong!");
+      }
     }
   };
 
