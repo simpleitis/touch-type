@@ -11,7 +11,7 @@ const RegistrationForm = () => {
 
   const [error, setError] = useState("");
 
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     const formData = new FormData(event.currentTarget);
@@ -46,7 +46,7 @@ const RegistrationForm = () => {
         setError("Something went wrong!");
       }
     }
-  }
+  };
 
   return (
     <div className="flex h-screen flex-col items-center justify-center text-2xl">
