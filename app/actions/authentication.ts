@@ -4,26 +4,30 @@ import { signIn } from "../auth";
 import { prisma } from "@/utils/db";
 import { hashPassword } from "../helpers/authHelpers";
 import { signInSchema, signUpSchema } from "@/lib/zod";
+import { Prisma } from "@prisma/client";
 
-export const register = async (formData: FormData) => {
-  const formName = formData.get("name");
-  const formEmail = formData.get("email");
-  const formPassword = formData.get("password");
+interface registerInfo {
+  name: string;
+  email: string;
+  password: string;
+}
 
-  const { email, password, name } = await signUpSchema.parseAsync({
-    email: formEmail,
-    password: formPassword,
-    name: formName,
-  });
+export const register = async ({ name, email, password }: registerInfo) => {
+  const { parsedName, parsedEmail, parsedPassword } =
+    await signUpSchema.parseAsync({
+      parsedName: name,
+      parsedEmail: email,
+      parsedPassword: password,
+    });
 
-  const hashedPassword = await hashPassword(password);
+  const hashedPassword = await hashPassword(parsedPassword);
 
   try {
     const dbRes = await prisma.user.create({
       data: {
-        email: email,
+        name: parsedName,
+        email: parsedEmail,
         password: hashedPassword,
-        name: name,
       },
     });
 
@@ -33,8 +37,13 @@ export const register = async (formData: FormData) => {
       return { success: false };
     }
   } catch (err: any) {
-    console.log(err);
-    return { success: false };
+    if (err instanceof Prisma.PrismaClientKnownRequestError) {
+      if (err.code === "P2002") {
+        return { success: false, message: "Email already in use!" };
+      }
+    }
+    console.log(err.message);
+    return { success: false, message: "Something went wrong" };
   }
 };
 
