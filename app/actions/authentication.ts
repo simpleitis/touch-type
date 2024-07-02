@@ -34,7 +34,7 @@ export const register = async ({ name, email, password }: registerInfo) => {
     if (dbRes.id) {
       return { success: true };
     } else {
-      return { success: false };
+      return { success: false, message: "Something went wrong!" };
     }
   } catch (err: any) {
     if (err instanceof Prisma.PrismaClientKnownRequestError) {
@@ -42,8 +42,9 @@ export const register = async ({ name, email, password }: registerInfo) => {
         return { success: false, message: "Email already in use!" };
       }
     }
+
     console.log(err.message);
-    return { success: false, message: "Something went wrong" };
+    return { success: false, message: "Something went wrong!" };
   }
 };
 

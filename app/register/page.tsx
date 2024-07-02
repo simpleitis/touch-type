@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
 import { register } from "../actions/authentication";
+import { signUpSchema } from "@/lib/zod";
 
 const RegistrationForm = () => {
   const router = useRouter();
@@ -13,18 +14,37 @@ const RegistrationForm = () => {
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    try {
-      const formData = new FormData(event.currentTarget);
+    const formData = new FormData(event.currentTarget);
+    const formName = formData.get("name");
+    const formEmail = formData.get("email");
+    const formPassword = formData.get("password");
 
-      const res = await register(formData);
+    try {
+      const { parsedName, parsedEmail, parsedPassword } =
+        await signUpSchema.parseAsync({
+          parsedName: formName,
+          parsedEmail: formEmail,
+          parsedPassword: formPassword,
+        });
+
+      const res = await register({
+        name: parsedName,
+        email: parsedEmail,
+        password: parsedPassword,
+      });
+
       if (res.success) {
         router.push("/login");
-      } else {
-        setError("Enter valid data");
+      } else if (!res.success && res.message) {
+        setError(res.message);
       }
-    } catch (e: any) {
-      setError("Something went wrong!");
-      console.error(e.message);
+    } catch (err: any) {
+      if (err.name == "ZodError") {
+        setError(`${err.issues[0]?.message}!`);
+      } else {
+        console.error("Error: ", err);
+        setError("Something went wrong!");
+      }
     }
   }
 
@@ -36,6 +56,7 @@ const RegistrationForm = () => {
         className="my-5 flex flex-col items-center rounded-md p-3"
       >
         <div className={`h-10 text-xl text-red-500`}>{error}</div>
+
         <div className="my-2 flex flex-col">
           <label htmlFor="name">Name</label>
           <input
