@@ -6,14 +6,18 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { signInSchema } from "@/lib/zod";
 import { toast } from "react-toastify";
+import LoadingSpinner from "../components/LoadingSpinner";
+import Button from "../components/Button";
 
 const LoginForm = () => {
   const router = useRouter();
 
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setLoading(true);
 
     const formData = new FormData(event.currentTarget);
     const formEmail = formData.get("email");
@@ -45,23 +49,25 @@ const LoginForm = () => {
         setError(`${err.issues[0]?.message}!`);
       } else {
         console.error("Error: ", err);
-        setError("Something went wrong!");
+        setError("Something went wrongafdsdfasasfd!");
       }
     }
+
+    setLoading(false);
   };
 
   return (
     <div className="flex h-screen flex-col items-center justify-center text-2xl">
       <p className="text-5xl font-bold">Login page</p>
       <form
-        className="my-5 flex flex-col items-center rounded-md p-3"
+        className="mb-2 flex flex-col items-center rounded-md p-3"
         onSubmit={onSubmit}
       >
-        <div className={`h-10 text-xl text-red-500`}>{error}</div>
+        <div className={`mb-2 h-4 text-lg text-red-500`}>{error}</div>
         <div className="my-2 flex flex-col">
           <label htmlFor="email">Email Address</label>
           <input
-            className="rounded border border-gray-500 text-black"
+            className="rounded border border-gray-500 bg-transparent"
             type="email"
             name="email"
             id="email"
@@ -71,19 +77,14 @@ const LoginForm = () => {
         <div className="my-2 flex flex-col">
           <label htmlFor="password">Password</label>
           <input
-            className="rounded border border-gray-500 text-black"
+            className="rounded border border-gray-500 bg-transparent"
             type="password"
             name="password"
             id="password"
           />
         </div>
 
-        <button
-          type="submit"
-          className="mt-4 flex w-36 items-center justify-center rounded bg-orange-300"
-        >
-          Login
-        </button>
+        <Button>{loading ? <LoadingSpinner /> : "Login"}</Button>
       </form>
       <p>
         Don't have an account?
