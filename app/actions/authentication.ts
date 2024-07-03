@@ -79,6 +79,7 @@ export const login = async ({ email, password }: LoginInfo) => {
     if (passwordsMatch) {
       const res = await signIn("credentials", {
         email: parsedEmail,
+        redirect: false,
       });
 
       if (res) {
