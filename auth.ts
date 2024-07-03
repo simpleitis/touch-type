@@ -11,6 +11,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         const email = credentials.email as string;
 
         return {
+          // todo - return user id as well
           email: email,
         };
       },
