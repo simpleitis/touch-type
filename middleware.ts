@@ -6,7 +6,7 @@ export const middleware = async (request: NextRequest) => {
 
   const session = await auth();
 
-  const isAuthenticated = !!session?.user?.email;
+  const isAuthenticated = !!session?.user?.id;
   if (!isAuthenticated) {
     return NextResponse.redirect(new URL("/login", nextUrl.origin));
   }
