@@ -17,7 +17,7 @@ interface LoginInfo {
   password: string;
 }
 
-export const register = async ({ name, email, password }: RegisterInfo) => {
+export async function register({ name, email, password }: RegisterInfo) {
   const { parsedName, parsedEmail, parsedPassword } =
     await signUpSchema.parseAsync({
       parsedName: name,
@@ -51,9 +51,9 @@ export const register = async ({ name, email, password }: RegisterInfo) => {
     console.log(err.message);
     return { success: false, message: "Something went wrong!" };
   }
-};
+}
 
-export const login = async ({ email, password }: LoginInfo) => {
+export async function login({ email, password }: LoginInfo) {
   try {
     const { parsedEmail, parsedPassword } = await signInSchema.parseAsync({
       parsedEmail: email,
@@ -96,4 +96,4 @@ export const login = async ({ email, password }: LoginInfo) => {
       message: "Something went wrong!",
     };
   }
-};
+}

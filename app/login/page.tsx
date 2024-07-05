@@ -3,7 +3,7 @@ import LoginForm from "./components/LoginForm";
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 
-const Login = async () => {
+export default async function Login() {
   const session = await auth();
 
   if (session?.user) {
@@ -22,6 +22,4 @@ const Login = async () => {
       </p>
     </div>
   );
-};
-
-export default Login;
+}

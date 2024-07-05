@@ -7,7 +7,7 @@ import LoadingSpinner from "../../components/LoadingSpinner";
 import Button from "../../components/Button";
 import { useRouter } from "next/navigation";
 
-const RegisterForm = () => {
+export default function RegisterForm() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -92,6 +92,4 @@ const RegisterForm = () => {
       <Button>{loading ? <LoadingSpinner /> : "Register"}</Button>
     </form>
   );
-};
-
-export default RegisterForm;
+}

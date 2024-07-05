@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import React, { FormEvent, useState } from "react";
 import { toast } from "react-toastify";
 
-const LoginForm = () => {
+export default function LoginForm() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -84,6 +84,4 @@ const LoginForm = () => {
       <Button>{loading ? <LoadingSpinner /> : "Login"}</Button>
     </form>
   );
-};
-
-export default LoginForm;
+}

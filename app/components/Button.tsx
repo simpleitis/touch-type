@@ -1,6 +1,6 @@
 import React from "react";
 
-const Button = ({ children }: { children: React.ReactNode }) => {
+export default function Button({ children }: { children: React.ReactNode }) {
   return (
     <button
       type="submit"
@@ -9,6 +9,4 @@ const Button = ({ children }: { children: React.ReactNode }) => {
       {children}
     </button>
   );
-};
-
-export default Button;
+}
