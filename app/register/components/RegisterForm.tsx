@@ -107,7 +107,7 @@ export default function RegisterForm() {
         className="my-5 flex w-80 cursor-pointer items-center justify-center gap-2 rounded-md border p-2"
         onClick={handleGithubClick}
       >
-        Register with
+        Sign up with
         <FaGithub />
       </div>
     </>

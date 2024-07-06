@@ -98,7 +98,7 @@ export default function LoginForm() {
         className="my-5 flex w-80 cursor-pointer items-center justify-center gap-2 rounded-md border p-2"
         onClick={handleGithubClick}
       >
-        Login with
+        Sign in with
         <FaGithub />
       </div>
     </>
