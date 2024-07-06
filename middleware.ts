@@ -5,7 +5,7 @@ import NextAuth from "next-auth";
 export async function middleware(request: NextRequest) {
   const { nextUrl } = request;
 
-  // An instance of nextAuth which does not have any code which is not edge complatible is created below to access the auth function, rather than importing the auth function from auth.ts
+  // An instance of nextAuth which does not have any code which is not edge complatible is created below to access the auth function, rather than importing the auth function from auth.ts, since the middle ware runs using edge runtime
   const { auth } = NextAuth(authConfig);
   const session = await auth();
 
