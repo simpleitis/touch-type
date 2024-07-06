@@ -1,5 +1,6 @@
 import Credentials from "next-auth/providers/credentials";
 import GitHub from "next-auth/providers/github";
+import Resend from "next-auth/providers/resend";
 import type { NextAuthConfig } from "next-auth";
 
 export default {
@@ -19,5 +20,6 @@ export default {
       },
     }),
     GitHub,
+    Resend,
   ],
 } satisfies NextAuthConfig;
