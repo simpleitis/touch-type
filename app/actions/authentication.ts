@@ -17,7 +17,11 @@ interface LoginInfo {
   password: string;
 }
 
-export async function register({ name, email, password }: RegisterInfo) {
+export async function credentialRegister({
+  name,
+  email,
+  password,
+}: RegisterInfo) {
   const { parsedName, parsedEmail, parsedPassword } =
     await signUpSchema.parseAsync({
       parsedName: name,
@@ -53,7 +57,7 @@ export async function register({ name, email, password }: RegisterInfo) {
   }
 }
 
-export async function login({ email, password }: LoginInfo) {
+export async function credentialLogin({ email, password }: LoginInfo) {
   try {
     const { parsedEmail, parsedPassword } = await signInSchema.parseAsync({
       parsedEmail: email,
@@ -96,4 +100,8 @@ export async function login({ email, password }: LoginInfo) {
       message: "Something went wrong!",
     };
   }
+}
+
+export async function githubAuthentication() {
+  await signIn("github");
 }

@@ -1,11 +1,15 @@
 "use client";
 
-import { login } from "@/app/actions/authentication";
+import {
+  credentialLogin,
+  githubAuthentication,
+} from "@/app/actions/authentication";
 import Button from "@/app/components/Button";
 import LoadingSpinner from "@/app/components/LoadingSpinner";
 import { signInSchema } from "@/lib/zod";
 import { useRouter } from "next/navigation";
 import React, { FormEvent, useState } from "react";
+import { FaGithub } from "react-icons/fa";
 import { toast } from "react-toastify";
 
 export default function LoginForm() {
@@ -28,7 +32,7 @@ export default function LoginForm() {
         parsedPassword: formPassword,
       });
 
-      const res = await login({
+      const res = await credentialLogin({
         email: parsedEmail,
         password: parsedPassword,
       });
@@ -55,33 +59,48 @@ export default function LoginForm() {
     setLoading(false);
   };
 
+  async function handleGithubClick() {
+    await githubAuthentication();
+  }
+
   return (
-    <form
-      className="mb-2 flex flex-col items-center rounded-md p-3"
-      onSubmit={onSubmit}
-    >
-      <div className={`mb-2 h-4 text-lg text-red-500`}>{error}</div>
-      <div className="my-2 flex flex-col">
-        <label htmlFor="email">Email Address</label>
-        <input
-          className="rounded border border-gray-500 bg-transparent"
-          type="email"
-          name="email"
-          id="email"
-        />
-      </div>
+    <>
+      <form
+        className="mb-2 flex flex-col items-center rounded-md p-3"
+        onSubmit={onSubmit}
+      >
+        <div className={`mb-2 h-4 text-lg text-red-500`}>{error}</div>
+        <div className="my-2 flex flex-col">
+          <label htmlFor="email">Email Address</label>
+          <input
+            className="rounded border border-gray-500 bg-transparent"
+            type="email"
+            name="email"
+            id="email"
+          />
+        </div>
 
-      <div className="my-2 flex flex-col">
-        <label htmlFor="password">Password</label>
-        <input
-          className="rounded border border-gray-500 bg-transparent"
-          type="password"
-          name="password"
-          id="password"
-        />
-      </div>
+        <div className="my-2 flex flex-col">
+          <label htmlFor="password">Password</label>
+          <input
+            className="rounded border border-gray-500 bg-transparent"
+            type="password"
+            name="password"
+            id="password"
+          />
+        </div>
 
-      <Button>{loading ? <LoadingSpinner /> : "Login"}</Button>
-    </form>
+        <Button>{loading ? <LoadingSpinner /> : "Login"}</Button>
+      </form>
+      <hr className="h-1 w-80"></hr>
+
+      <div
+        className="my-5 flex w-80 cursor-pointer items-center justify-center gap-2 rounded-md border p-2"
+        onClick={handleGithubClick}
+      >
+        Login with
+        <FaGithub />
+      </div>
+    </>
   );
 }
