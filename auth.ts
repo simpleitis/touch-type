@@ -1,9 +1,12 @@
 import NextAuth from "next-auth";
-import Credentials from "next-auth/providers/credentials";
-import GitHub from "next-auth/providers/github";
+
 import { prisma } from "./utils/db";
+import { PrismaAdapter } from "@auth/prisma-adapter";
+import authConfig from "./auth.config";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
+  adapter: PrismaAdapter(prisma),
+  session: { strategy: "jwt" },
   callbacks: {
     async signIn({ user, account, profile }) {
       if (account?.provider === "github") {
@@ -38,24 +41,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       return session;
     },
   },
-  providers: [
-    Credentials({
-      credentials: {
-        email: {},
-        id: {},
-        name: {},
-      },
-      authorize: async (credentials) => {
-        const email = credentials.email as string;
-        const id = credentials.id as string;
-        const name = credentials.name as string;
-
-        return { email, id, name };
-      },
-    }),
-    GitHub,
-  ],
+  ...authConfig,
   pages: {
-    // signIn: "/login",
+    signIn: "/login",
   },
 });
