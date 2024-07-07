@@ -20,15 +20,23 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         });
 
         if (!registeredUser?.id) {
-          const dbRes = await prisma.user.create({
-            data: {
-              name: name,
-              email: email,
-            },
-          });
+          try {
+            const dbRes = await prisma.user.create({
+              data: {
+                name: name,
+                email: email,
+              },
+            });
+
+            if (dbRes.id) {
+              return true;
+            }
+          } catch (error) {
+            console.log(error);
+          }
         }
       }
-      return true; // Allow sign in
+      return true;
     },
     jwt({ token, user }) {
       if (user) {
