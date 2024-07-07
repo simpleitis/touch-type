@@ -52,7 +52,7 @@ export default function LoginForm() {
         setError(`${err.issues[0]?.message}!`);
       } else {
         console.error("Error: ", err);
-        setError("Something went wrongafdsdfasasfd!");
+        setError("Something went wrong!");
       }
     }
 
