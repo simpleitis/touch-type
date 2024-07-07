@@ -21,6 +21,7 @@ export default function LoginForm() {
   const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setLoading(true);
+    setError("");
 
     const formData = new FormData(event.currentTarget);
     const formEmail = formData.get("email");

@@ -20,6 +20,7 @@ export default function RegisterForm() {
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setLoading(true);
+    setError("");
 
     const formData = new FormData(event.currentTarget);
     const formName = formData.get("name");
@@ -102,7 +103,7 @@ export default function RegisterForm() {
       </form>
 
       <hr className="h-1 w-80"></hr>
-      
+
       <div
         className="my-5 flex w-80 cursor-pointer items-center justify-center gap-2 rounded-md border p-2"
         onClick={handleGithubClick}
