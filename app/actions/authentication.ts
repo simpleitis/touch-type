@@ -94,7 +94,11 @@ export async function credentialLogin({ email, password }: LoginInfo) {
     } else {
       return { success: false, message: "Invalid credentials!" };
     }
+
+    // await signIn("nodemailer", { email: parsedEmail, redirect: false });
   } catch (err: any) {
+    console.log("🚀 ~ credentialLogin ~ err:", err);
+
     return {
       success: false,
       message: "Something went wrong!",
