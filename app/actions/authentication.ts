@@ -3,7 +3,7 @@
 import { signIn } from "../../auth";
 import { prisma } from "@/utils/db";
 import { comparePassword, hashPassword } from "../helpers/authHelpers";
-import { signInSchema, signUpSchema } from "@/lib/zod";
+import { magicLinkSchema, signInSchema, signUpSchema } from "@/lib/zod";
 import { Prisma } from "@prisma/client";
 
 interface RegisterInfo {
@@ -15,6 +15,10 @@ interface RegisterInfo {
 interface LoginInfo {
   email: string;
   password: string;
+}
+
+interface MagicLinkInfo {
+  email: string;
 }
 
 export async function credentialRegister({
@@ -94,8 +98,6 @@ export async function credentialLogin({ email, password }: LoginInfo) {
     } else {
       return { success: false, message: "Invalid credentials!" };
     }
-
-    // await signIn("nodemailer", { email: parsedEmail, redirect: false });
   } catch (err: any) {
     console.log("🚀 ~ credentialLogin ~ err:", err);
 
@@ -108,4 +110,12 @@ export async function credentialLogin({ email, password }: LoginInfo) {
 
 export async function githubAuthentication() {
   await signIn("github");
+}
+
+export async function magicLinkAuthentication({ email }: MagicLinkInfo) {
+  const { parsedEmail } = await magicLinkSchema.parseAsync({
+    parsedEmail: email,
+  });
+
+  await signIn("nodemailer", { email: parsedEmail, redirect: false });
 }
