@@ -1,6 +1,6 @@
 import Credentials from "next-auth/providers/credentials";
 import GitHub from "next-auth/providers/github";
-import Resend from "next-auth/providers/resend";
+import Nodemailer from "next-auth/providers/nodemailer";
 import type { NextAuthConfig } from "next-auth";
 
 export default {
@@ -20,6 +20,9 @@ export default {
       },
     }),
     GitHub,
-    Resend,
+    Nodemailer({
+      server: process.env.EMAIL_SERVER,
+      from: process.env.EMAIL_FROM,
+    }),
   ],
 } satisfies NextAuthConfig;
