@@ -26,7 +26,7 @@ export async function sendSetPasswordEmail({
     text: "Please set a password for you account to use credentials login",
     html: `
       <p>Please set a password to use credential login. Click the below button or copy paste the url into a new tab.</p>
-      <a href="${process.env.AUTH_URL}/auth/login/set-password?token=${verificationToken}" 
+      <a href="${process.env.AUTH_URL}/auth/login/set-password?token=${verificationToken}&email=${email}" 
          style="display: inline-block; padding: 10px 20px; font-size: 16px; color: white; background-color: blue; text-decoration: none; border-radius: 5px;">
         Set Password
       </a>
