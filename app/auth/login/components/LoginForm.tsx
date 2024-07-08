@@ -3,14 +3,15 @@
 import {
   credentialLogin,
   githubAuthentication,
-  magicLinkAuthentication,
+  magicLinkLogin,
+  sendSetPasswordMail,
 } from "@/app/actions/authentication";
 import Button from "@/app/components/Button";
 import LoadingSpinner from "@/app/components/LoadingSpinner";
 import { AuthContext } from "@/app/context/AuthenticationContext";
-import { magicLinkSchema, signInSchema } from "@/lib/zod";
+import { emailSchema, signInSchema } from "@/lib/zod";
 import { useRouter } from "next/navigation";
-import React, { FormEvent, useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { FaGithub } from "react-icons/fa";
 import { IoIosMail } from "react-icons/io";
 import { MdOutlinePassword } from "react-icons/md";
@@ -28,7 +29,7 @@ export default function LoginForm() {
     setError("");
   }, [magicLink]);
 
-  const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setLoading(true);
     setError("");
@@ -39,10 +40,10 @@ export default function LoginForm() {
 
     if (magicLink) {
       try {
-        const { parsedEmail } = await magicLinkSchema.parseAsync({
+        const { parsedEmail } = await emailSchema.parseAsync({
           parsedEmail: formEmail,
         });
-        await magicLinkAuthentication({ email: parsedEmail });
+        await magicLinkLogin({ email: parsedEmail });
 
         toast.success("Verification link sent! Please check your email");
       } catch (err: any) {
@@ -73,7 +74,12 @@ export default function LoginForm() {
         } else if (res?.success) {
           router.push("/");
         } else if (!res?.success && res?.message) {
-          setError(res.message);
+          if (res?.noPassword) {
+            await sendSetPasswordMail({ email: parsedEmail });
+            toast.error(`${res?.message}! \n Please check you email!`);
+          } else {
+            setError(res.message);
+          }
         }
       } catch (err: any) {
         if (err.name == "ZodError") {
@@ -149,7 +155,7 @@ export default function LoginForm() {
 
         <Button>{loading ? <LoadingSpinner /> : "Login"}</Button>
       </form>
-      <hr className="mt-4 mb-5 h-1 w-80"></hr>
+      <hr className="mb-5 mt-4 h-1 w-80"></hr>
 
       <div
         className="mb-5 flex w-80 cursor-pointer items-center justify-center gap-2 rounded-md border p-2"
