@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useContext, useState } from "react";
+import { FormEvent, useContext, useEffect, useState } from "react";
 import {
   credentialRegister,
   githubAuthentication,
@@ -22,6 +22,10 @@ export default function RegisterForm() {
   const { magicLink, setMagicLink } = useContext(AuthContext);
 
   const router = useRouter();
+
+  useEffect(() => {
+    setError("");
+  }, [magicLink]);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();

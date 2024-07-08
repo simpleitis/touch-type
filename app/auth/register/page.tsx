@@ -13,7 +13,7 @@ export default async function Register() {
     <div className="flex h-screen flex-col items-center justify-center text-2xl">
       <p className="text-5xl font-bold">Register page</p>
       <RegisterForm />
-      <p>
+      <p className="mt-5">
         Already have an account?
         <Link href={"/auth/login"}>
           <span className="underline">Login</span>
