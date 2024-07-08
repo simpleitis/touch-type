@@ -4,12 +4,15 @@ import { signIn } from "../../auth";
 import { prisma } from "@/utils/db";
 import { comparePassword, hashPassword } from "../helpers/authHelpers";
 import {
-  magicLinkSchema,
+  emailSchema,
   magicLinkSignUpSchema,
   signInSchema,
   signUpSchema,
 } from "@/lib/zod";
 import { Prisma } from "@prisma/client";
+import { sendSetPasswordEmail } from "@/lib/nodemailer";
+import { v4 as uuidv4 } from "uuid";
+import { getDatetimePlusOneHourGMT } from "../helpers/datetime";
 
 interface RegisterInfo {
   name: string;
@@ -27,7 +30,7 @@ interface LoginInfo {
   password: string;
 }
 
-interface MagicLinkInfo {
+interface EmailInfo {
   email: string;
 }
 
@@ -127,6 +130,13 @@ export async function credentialLogin({ email, password }: LoginInfo) {
     }
 
     const userPassword = user?.password as string;
+    if (!userPassword) {
+      return {
+        success: false,
+        message: "Password not set",
+        noPassword: true,
+      };
+    }
     const passwordsMatch = await comparePassword(parsedPassword, userPassword);
 
     if (passwordsMatch) {
@@ -157,10 +167,61 @@ export async function githubAuthentication() {
   await signIn("github");
 }
 
-export async function magicLinkAuthentication({ email }: MagicLinkInfo) {
-  const { parsedEmail } = await magicLinkSchema.parseAsync({
+export async function magicLinkLogin({ email }: EmailInfo) {
+  const { parsedEmail } = await emailSchema.parseAsync({
     parsedEmail: email,
   });
 
   await signIn("nodemailer", { email: parsedEmail, redirect: false });
+}
+
+export async function sendSetPasswordMail({ email }: EmailInfo) {
+  const { parsedEmail } = await emailSchema.parseAsync({
+    parsedEmail: email,
+  });
+
+  const verificationToken = uuidv4();
+  const expiry = getDatetimePlusOneHourGMT();
+
+  const res = await prisma.verificationToken.create({
+    data: {
+      identifier: parsedEmail,
+      token: verificationToken,
+      expires: expiry,
+    },
+  });
+
+  await sendSetPasswordEmail({
+    email: parsedEmail,
+    verificationToken: verificationToken,
+  });
+}
+
+export async function setPassword({ email, password }: LoginInfo) {
+  try {
+    const { parsedEmail, parsedPassword } = await signInSchema.parseAsync({
+      parsedEmail: email,
+      parsedPassword: password,
+    });
+
+    const hashedPassword = await hashPassword(parsedPassword);
+
+    const updateUser = await prisma.user.update({
+      where: {
+        email: parsedEmail,
+      },
+      data: {
+        password: hashedPassword,
+      },
+    });
+
+    if (updateUser?.id) {
+      return { success: true };
+    } else {
+      return { success: false, message: "Something went wrong!" };
+    }
+  } catch (err: any) {
+    console.log(err.message);
+    return { success: false, message: "Something went wrong!" };
+  }
 }
