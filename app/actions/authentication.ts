@@ -3,13 +3,23 @@
 import { signIn } from "../../auth";
 import { prisma } from "@/utils/db";
 import { comparePassword, hashPassword } from "../helpers/authHelpers";
-import { magicLinkSchema, signInSchema, signUpSchema } from "@/lib/zod";
+import {
+  magicLinkSchema,
+  magicLinkSignUpSchema,
+  signInSchema,
+  signUpSchema,
+} from "@/lib/zod";
 import { Prisma } from "@prisma/client";
 
 interface RegisterInfo {
   name: string;
   email: string;
   password: string;
+}
+
+interface MagicLinkRegisterInfo {
+  name: string;
+  email: string;
 }
 
 interface LoginInfo {
@@ -41,6 +51,41 @@ export async function credentialRegister({
         name: parsedName,
         email: parsedEmail,
         password: hashedPassword,
+      },
+    });
+
+    if (dbRes.id) {
+      return { success: true };
+    } else {
+      return { success: false, message: "Something went wrong!" };
+    }
+  } catch (err: any) {
+    if (err instanceof Prisma.PrismaClientKnownRequestError) {
+      if (err.code === "P2002") {
+        return { success: false, message: "Email already in use!" };
+      }
+    }
+
+    console.log(err.message);
+    return { success: false, message: "Something went wrong!" };
+  }
+}
+
+export async function magicLinkRegister({
+  name,
+  email,
+}: MagicLinkRegisterInfo) {
+  const { parsedName, parsedEmail } = await magicLinkSignUpSchema.parseAsync({
+    parsedName: name,
+    parsedEmail: email,
+  });
+
+  try {
+    const dbRes = await prisma.user.create({
+      data: {
+        name: parsedName,
+        email: parsedEmail,
+        password: null,
       },
     });
 

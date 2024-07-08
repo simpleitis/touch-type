@@ -15,7 +15,7 @@ export default async function Register() {
       <RegisterForm />
       <p>
         Already have an account?
-        <Link href={"/login"}>
+        <Link href={"/auth/login"}>
           <span className="underline">Login</span>
         </Link>
       </p>

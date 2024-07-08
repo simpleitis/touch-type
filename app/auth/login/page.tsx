@@ -16,7 +16,7 @@ export default async function Login() {
       <LoginForm />
       <p>
         Don't have an account?
-        <Link href={"/register"}>
+        <Link href={"/auth/register"}>
           <span className="underline">Register</span>
         </Link>
       </p>

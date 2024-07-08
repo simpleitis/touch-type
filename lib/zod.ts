@@ -23,6 +23,15 @@ export const signUpSchema = object({
     .max(32, "Password must be less than 32 characters"),
 });
 
+export const magicLinkSignUpSchema = object({
+  parsedName: string({ required_error: "Name is required" })
+    .min(2, "Name is required")
+    .max(32, "Name must be less than 32 characters"),
+  parsedEmail: string({ required_error: "Email is required" })
+    .min(6, "Email is required")
+    .email("Invalid email"),
+});
+
 export const magicLinkSchema = object({
   parsedEmail: string({ required_error: "Email is required" })
     .min(1, "Email is required")
