@@ -4,10 +4,10 @@ import { FormEvent, useState } from "react";
 import {
   credentialRegister,
   githubAuthentication,
-} from "../../actions/authentication";
+} from "../../../actions/authentication";
 import { signUpSchema } from "@/lib/zod";
-import LoadingSpinner from "../../components/LoadingSpinner";
-import Button from "../../components/Button";
+import LoadingSpinner from "../../../components/LoadingSpinner";
+import Button from "../../../components/Button";
 import { useRouter } from "next/navigation";
 import { FaGithub } from "react-icons/fa";
 

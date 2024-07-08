@@ -12,10 +12,10 @@ export async function middleware(request: NextRequest) {
   const isAuthenticated = !!session?.user?.email;
 
   if (!isAuthenticated) {
-    return NextResponse.redirect(new URL("/login", nextUrl.origin));
+    return NextResponse.redirect(new URL("/auth/login", nextUrl.origin));
   }
 }
 
 export const config = {
-  matcher: ["/((?!api|_next/static|_next/image|favicon.ico|login|register).*)"],
+  matcher: ["/((?!api|_next/static|_next/image|favicon.ico|auth/login|auth/register).*)"],
 };

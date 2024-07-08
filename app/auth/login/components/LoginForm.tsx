@@ -10,6 +10,7 @@ import { signInSchema } from "@/lib/zod";
 import { useRouter } from "next/navigation";
 import React, { FormEvent, useState } from "react";
 import { FaGithub } from "react-icons/fa";
+import { IoIosMail } from "react-icons/io";
 import { toast } from "react-toastify";
 
 export default function LoginForm() {
@@ -64,6 +65,8 @@ export default function LoginForm() {
     await githubAuthentication();
   }
 
+  async function handleMailClick() {}
+
   return (
     <>
       <form
@@ -96,11 +99,18 @@ export default function LoginForm() {
       <hr className="h-1 w-80"></hr>
 
       <div
-        className="my-5 flex w-80 cursor-pointer items-center justify-center gap-2 rounded-md border p-2"
+        className="mt-5 flex w-80 cursor-pointer items-center justify-center gap-2 rounded-md border p-2"
         onClick={handleGithubClick}
       >
         Sign in with
         <FaGithub />
+      </div>
+      <div
+        className="mb-5 mt-3 flex w-80 cursor-pointer items-center justify-center gap-2 rounded-md border p-2"
+        onClick={handleMailClick}
+      >
+        Sign in with
+        <IoIosMail />
       </div>
     </>
   );
