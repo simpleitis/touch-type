@@ -238,29 +238,41 @@ export async function setPassword({ email, password, token }: SetPasswordInfo) {
     });
 
     if (verificationToken?.token) {
-      const currentDateTime = new Date();
-      if (verificationToken?.expires > currentDateTime) {
-        const hashedPassword = await hashPassword(parsedPassword);
-
-        const updateUser = await prisma.user.update({
+      const deleteVerificationToken = await prisma.verificationToken.deleteMany(
+        {
           where: {
-            email: parsedEmail,
+            token: verificationToken?.token,
           },
-          data: {
-            password: hashedPassword,
-          },
-        });
+        },
+      );
 
-        if (updateUser?.id) {
-          return { success: true };
+      if (deleteVerificationToken) {
+        const currentDateTime = new Date();
+        if (verificationToken?.expires > currentDateTime) {
+          const hashedPassword = await hashPassword(parsedPassword);
+
+          const updateUser = await prisma.user.update({
+            where: {
+              email: parsedEmail,
+            },
+            data: {
+              password: hashedPassword,
+            },
+          });
+
+          if (updateUser?.id) {
+            return { success: true };
+          } else {
+            return { success: false, message: "Something went wrong!" };
+          }
         } else {
-          return { success: false, message: "Something went wrong!" };
+          return { success: false, message: "Verification token expired!" };
         }
       } else {
-        return { success: false, message: "Verification token expired!" };
+        return { success: false, message: "Something went wrong!" };
       }
     } else {
-      return { success: false, message: "Something went wrong!" };
+      return { success: false, message: "Verification token expired!" };
     }
   } catch (err: any) {
     console.log(err.message);
