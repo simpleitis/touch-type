@@ -55,3 +55,7 @@ export const setPasswordSchema = object({
     .min(8, "Confirm password must be more than 8 characters")
     .max(32, "Confirm password must be less than 32 characters"),
 });
+
+export const tokenSchema = object({
+  parsedToken: string({ required_error: "Token is required" }).uuid(),
+});

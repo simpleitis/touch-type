@@ -8,9 +8,10 @@ import {
   magicLinkSignUpSchema,
   signInSchema,
   signUpSchema,
+  tokenSchema,
 } from "@/lib/zod";
 import { Prisma } from "@prisma/client";
-import { sendSetPasswordEmail } from "@/lib/nodemailer";
+import { sendChangePasswordEmail } from "@/lib/nodemailer";
 import { v4 as uuidv4 } from "uuid";
 import { getDatetimePlusOneHourGMT } from "../helpers/datetime";
 
@@ -32,6 +33,12 @@ interface LoginInfo {
 
 interface EmailInfo {
   email: string;
+}
+
+interface SetPasswordInfo {
+  email: string;
+  password: string;
+  token: string;
 }
 
 export async function credentialRegister({
@@ -176,47 +183,82 @@ export async function magicLinkLogin({ email }: EmailInfo) {
 }
 
 export async function sendSetPasswordMail({ email }: EmailInfo) {
-  const { parsedEmail } = await emailSchema.parseAsync({
-    parsedEmail: email,
-  });
+  try {
+    const { parsedEmail } = await emailSchema.parseAsync({
+      parsedEmail: email,
+    });
 
-  const verificationToken = uuidv4();
-  const expiry = getDatetimePlusOneHourGMT();
+    const verificationToken = uuidv4();
+    const expiry = getDatetimePlusOneHourGMT();
 
-  const res = await prisma.verificationToken.create({
-    data: {
-      identifier: parsedEmail,
-      token: verificationToken,
-      expires: expiry,
-    },
-  });
+    const res = await prisma.verificationToken.create({
+      data: {
+        identifier: parsedEmail,
+        token: verificationToken,
+        expires: expiry,
+      },
+    });
 
-  await sendSetPasswordEmail({
-    email: parsedEmail,
-    verificationToken: verificationToken,
-  });
+    if (res.token) {
+      const sendVerificationEmail = await sendChangePasswordEmail({
+        email: parsedEmail,
+        verificationToken: verificationToken,
+      });
+
+      if (sendVerificationEmail.success) {
+        return { success: true };
+      } else {
+        return { success: false, message: "Something went wrong!" };
+      }
+    } else {
+      return { success: false, message: "Something went wrong!" };
+    }
+  } catch (err: any) {
+    console.log(err.message);
+    return { success: false, message: "Something went wrong!" };
+  }
 }
 
-export async function setPassword({ email, password }: LoginInfo) {
+export async function setPassword({ email, password, token }: SetPasswordInfo) {
   try {
     const { parsedEmail, parsedPassword } = await signInSchema.parseAsync({
       parsedEmail: email,
       parsedPassword: password,
     });
 
-    const hashedPassword = await hashPassword(parsedPassword);
+    const { parsedToken } = await tokenSchema.parseAsync({
+      parsedToken: token,
+    });
 
-    const updateUser = await prisma.user.update({
+    const verificationToken = await prisma.verificationToken.findFirst({
       where: {
-        email: parsedEmail,
-      },
-      data: {
-        password: hashedPassword,
+        token: parsedToken,
+        identifier: parsedEmail,
       },
     });
 
-    if (updateUser?.id) {
-      return { success: true };
+    if (verificationToken?.token) {
+      const currentDateTime = new Date();
+      if (verificationToken?.expires > currentDateTime) {
+        const hashedPassword = await hashPassword(parsedPassword);
+
+        const updateUser = await prisma.user.update({
+          where: {
+            email: parsedEmail,
+          },
+          data: {
+            password: hashedPassword,
+          },
+        });
+
+        if (updateUser?.id) {
+          return { success: true };
+        } else {
+          return { success: false, message: "Something went wrong!" };
+        }
+      } else {
+        return { success: false, message: "Verification token expired!" };
+      }
     } else {
       return { success: false, message: "Something went wrong!" };
     }

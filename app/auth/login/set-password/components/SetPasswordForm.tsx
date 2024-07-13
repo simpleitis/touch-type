@@ -10,9 +10,10 @@ import { toast } from "react-toastify";
 
 interface SetPasswordForm {
   email: string;
+  token: string;
 }
 
-export default function SetPasswordForm({ email }: SetPasswordForm) {
+export default function SetPasswordForm({ email, token }: SetPasswordForm) {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -36,10 +37,11 @@ export default function SetPasswordForm({ email }: SetPasswordForm) {
 
       if (parsedPassword !== parsedConfirmPassword) {
         setError("Passwords don't match!");
-      } else {
+      } else if (parsedPassword === parsedConfirmPassword) {
         const res = await setPassword({
           email: email,
           password: parsedPassword,
+          token: token,
         });
 
         if (res.success) {

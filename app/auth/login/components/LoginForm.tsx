@@ -75,8 +75,14 @@ export default function LoginForm() {
           router.push("/");
         } else if (!res?.success && res?.message) {
           if (res?.noPassword) {
-            await sendSetPasswordMail({ email: parsedEmail });
-            toast.error(`${res?.message}! \n Please check you email!`);
+            const sendEmailRes = await sendSetPasswordMail({
+              email: parsedEmail,
+            });
+            if (sendEmailRes?.success) {
+              toast.error(`${res?.message}! \n Please check you email!`);
+            } else if (!sendEmailRes.success && sendEmailRes.message) {
+              setError(sendEmailRes.message);
+            }
           } else {
             setError(res.message);
           }
