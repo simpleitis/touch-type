@@ -181,13 +181,13 @@ export default function LoginForm() {
         {!magicLink && (
           <p
             onClick={resetPassword}
-            className={`cursor-pointer p-2 underline ${passwordResetLoading ? "pointer-events-none" : "pointer-events-auto"}`}
+            className={`cursor-pointer pt-2 underline ${passwordResetLoading ? "pointer-events-none" : "pointer-events-auto"}`}
           >
             Forgot password?
           </p>
         )}
       </form>
-      <hr className="mb-5 h-1 w-80"></hr>
+      <hr className="mb-5 mt-4 h-1 w-80"></hr>
 
       <GithubAuth onClick={handleGithubClick} />
     </>
