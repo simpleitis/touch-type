@@ -7,21 +7,23 @@ import {
   sendSetPasswordMail,
 } from "@/app/actions/authentication";
 import Button from "@/app/components/Button";
+import GithubAuth from "@/app/components/GithubAuth";
 import LoadingSpinner from "@/app/components/LoadingSpinner";
 import { AuthContext } from "@/app/context/AuthenticationContext";
 import { emailSchema, signInSchema } from "@/lib/zod";
 import { useRouter } from "next/navigation";
-import React, { useContext, useEffect, useState } from "react";
-import { FaGithub } from "react-icons/fa";
-import { IoIosMail } from "react-icons/io";
-import { MdOutlinePassword } from "react-icons/md";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
+import AuthMethodSwitcher from "./AuthMethodSwitcher";
 
 export default function LoginForm() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [passwordResetLoading, setPasswordResetLoading] = useState(false);
 
-  const { magicLink, setMagicLink } = useContext(AuthContext);
+  const emailRef = useRef<HTMLInputElement>(null);
+
+  const { magicLink } = useContext(AuthContext);
 
   const router = useRouter();
 
@@ -29,7 +31,7 @@ export default function LoginForm() {
     setError("");
   }, [magicLink]);
 
-  const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setLoading(true);
     setError("");
@@ -98,39 +100,54 @@ export default function LoginForm() {
     }
 
     setLoading(false);
-  };
+  }
 
   async function handleGithubClick() {
     await githubAuthentication();
   }
 
+  async function resetPassword() {
+    const email = emailRef?.current?.value;
+    setError("");
+
+    try {
+      setPasswordResetLoading(true);
+
+      const { parsedEmail } = await emailSchema.parseAsync({
+        parsedEmail: email,
+      });
+
+      const id = toast.loading("Processing...");
+
+      const sendEmailRes = await sendSetPasswordMail({
+        email: parsedEmail,
+      });
+
+      if (sendEmailRes.success) {
+        toast.update(id, {
+          render: "Password reset email sent! Please check your email",
+          type: "success",
+          isLoading: false,
+          autoClose: 3000,
+        });
+      } else if (!sendEmailRes.success && sendEmailRes.message) {
+        setError(sendEmailRes.message);
+      }
+    } catch (err: any) {
+      if (err.name == "ZodError") {
+        setError(`${err.issues[0]?.message}!`);
+      } else {
+        console.error("Error: ", err);
+        setError("Something went wrong!");
+      }
+    } finally {
+      setPasswordResetLoading(false);
+    }
+  }
+
   return (
     <>
-      <div className="mt-10 flex h-12 w-[358px] justify-center overflow-hidden rounded-md border border-white">
-        <div
-          title="Sign in using email/password"
-          className="flex w-full cursor-pointer items-center justify-center"
-          onClick={() => setMagicLink(false)}
-        >
-          <div
-            className={`flex h-[80%] w-[95%] cursor-pointer items-center justify-center rounded-md ${magicLink ? "bg-black text-white" : "bg-white text-black"}`}
-          >
-            <MdOutlinePassword />
-          </div>
-        </div>
-
-        <div
-          title="Sign in using email verification"
-          className="flex w-full cursor-pointer items-center justify-center"
-          onClick={() => setMagicLink(true)}
-        >
-          <div
-            className={`flex h-[80%] w-[95%] cursor-pointer items-center justify-center rounded-md ${magicLink ? "bg-white text-black" : "bg-black text-white"}`}
-          >
-            <IoIosMail />
-          </div>
-        </div>
-      </div>
+      <AuthMethodSwitcher />
 
       <div className={`my-2 h-4 text-lg text-red-500`}>{error}</div>
       <form
@@ -144,6 +161,7 @@ export default function LoginForm() {
             type="email"
             name="email"
             id="email"
+            ref={emailRef}
           />
         </div>
 
@@ -160,16 +178,18 @@ export default function LoginForm() {
         )}
 
         <Button>{loading ? <LoadingSpinner /> : "Login"}</Button>
+        {!magicLink && (
+          <p
+            onClick={resetPassword}
+            className={`cursor-pointer p-2 underline ${passwordResetLoading ? "pointer-events-none" : "pointer-events-auto"}`}
+          >
+            Forgot password?
+          </p>
+        )}
       </form>
-      <hr className="mb-5 mt-4 h-1 w-80"></hr>
+      <hr className="mb-5 h-1 w-80"></hr>
 
-      <div
-        className="mb-5 flex w-80 cursor-pointer items-center justify-center gap-2 rounded-md border p-2"
-        onClick={handleGithubClick}
-      >
-        Sign in with
-        <FaGithub />
-      </div>
+      <GithubAuth onClick={handleGithubClick} />
     </>
   );
 }
