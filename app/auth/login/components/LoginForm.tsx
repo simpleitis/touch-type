@@ -131,6 +131,12 @@ export default function LoginForm() {
           autoClose: 3000,
         });
       } else if (!sendEmailRes.success && sendEmailRes.message) {
+        toast.update(id, {
+          render: "Please try again after sometime!",
+          type: "error",
+          isLoading: false,
+          autoClose: 3000,
+        });
         setError(sendEmailRes.message);
       }
     } catch (err: any) {
