@@ -7,7 +7,7 @@ interface SearchParams {
 export default function SetPassword({ searchParams }: SearchParams) {
   return (
     <div className="flex h-screen flex-col items-center justify-center">
-      <p className="text-5xl font-bold">Set new password</p>
+      <p className="text-4xl font-bold">Set new password</p>
       <SetPasswordForm
         email={searchParams?.email}
         token={searchParams?.token}

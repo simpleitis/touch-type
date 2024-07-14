@@ -71,21 +71,21 @@ export default function SetPasswordForm({ email, token }: SetPasswordForm) {
     <>
       <div className={`my-2 h-4 text-lg text-red-500`}>{error}</div>
       <form
-        className="mb-2 flex flex-col items-center justify-start rounded-md"
+        className="mb-2 flex w-[358px] flex-col items-center justify-start rounded-md text-xl"
         onSubmit={onSubmit}
       >
-        <div className="my-2 flex flex-col">
+        <div className="my-2 flex w-full flex-col">
           <input
-            className="rounded border border-gray-500 bg-transparent p-1"
+            className="rounded border border-gray-500 bg-transparent p-2"
             type="password"
             name="password"
             id="password"
             placeholder="Password"
           />
         </div>
-        <div className="my-2 flex flex-col">
+        <div className="my-2 flex w-full flex-col">
           <input
-            className="rounded border border-gray-500 bg-transparent p-1"
+            className="rounded border border-gray-500 bg-transparent p-2"
             type="password"
             name="confirmPassword"
             id="confirmPassword"
