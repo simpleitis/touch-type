@@ -12,7 +12,7 @@ const Keyboard = () => {
 
     setTimeout(() => {
       setPressedKey(null);
-    }, 500);
+    }, 100);
   };
 
   useEffect(() => {
