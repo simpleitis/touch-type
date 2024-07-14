@@ -1,6 +1,4 @@
-"use client";
-
-import React, { useEffect } from "react";
+import React from "react";
 
 interface KeyProps {
   value: string;
@@ -10,6 +8,7 @@ interface KeyProps {
 }
 
 function Key({ value, display, isPressed, specialWidth }: KeyProps) {
+
   return (
     <div
       className={`m-2 flex h-20 items-center justify-center rounded-lg border-2 border-white border-opacity-40 px-2 py-1 shadow-lg ${
