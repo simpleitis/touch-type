@@ -14,15 +14,16 @@ datasource db {
 }
 
 model User {
-  id  String @id @default(uuid())
-  email String  @unique
-  name  String?
-  password  String? 
-  username      String?         @unique
-  emailVerified DateTime?
-  image         String?
-  Session       Session[]
-  Account       Account?
+  id                       String  @id @default(uuid())
+  email                    String  @unique
+  name                     String?
+  password                 String? 
+  username                 String? @unique
+  emailVerified            DateTime?
+  image                    String?
+  Session                  Session[]
+  Account                  Account?
+  UserProgress             UserProgress?
  
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -52,11 +53,11 @@ model Account {
 }
 
 model Session {
-  id           String   @id @default(cuid())
-  sessionToken String   @unique
-  userId       String
-  expires      DateTime
-  user         User     @relation(fields: [userId], references: [id])
+  id                        String  @id @default(cuid())
+  sessionToken              String  @unique
+  userId                    String
+  expires                   DateTime
+  user                      User    @relation(fields: [userId], references: [id])
  
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -65,9 +66,15 @@ model Session {
 }
  
 model VerificationToken {
-  identifier String
-  token      String
-  expires    DateTime
+  identifier               String
+  token                    String
+  expires                  DateTime
  
   @@unique([identifier, token])
+}
+
+model UserProgress {
+   id                      String  @id @default(uuid())
+   userId                  String  @unique
+   user                    User    @relation(fields: [userId], references: [id])
 }
