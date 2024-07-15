@@ -19,7 +19,7 @@ export default function SetPasswordForm({ email, token }: SetPasswordForm) {
 
   const router = useRouter();
 
-  const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmti = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setLoading(true);
     setError("");
@@ -72,7 +72,7 @@ export default function SetPasswordForm({ email, token }: SetPasswordForm) {
       <div className={`my-2 h-4 text-lg text-red-500`}>{error}</div>
       <form
         className="mb-2 flex w-[358px] flex-col items-center justify-start rounded-md text-xl"
-        onSubmit={onSubmit}
+        onSubmit={handleSubmti}
       >
         <div className="my-2 flex w-full flex-col">
           <input

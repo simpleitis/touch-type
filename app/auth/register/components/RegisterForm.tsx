@@ -11,9 +11,8 @@ import LoadingSpinner from "../../../components/LoadingSpinner";
 import Button from "../../../components/Button";
 import { useRouter } from "next/navigation";
 import { FaGithub } from "react-icons/fa";
-import { IoIosMail } from "react-icons/io";
-import { MdOutlinePassword } from "react-icons/md";
 import { AuthContext } from "@/app/context/AuthenticationContext";
+import AuthMethodSwitcher from "../../login/components/AuthMethodSwitcher";
 
 export default function RegisterForm() {
   const [error, setError] = useState("");
@@ -96,37 +95,14 @@ export default function RegisterForm() {
     setLoading(false);
   }
 
-  async function handleGithubClick() {
+  async function handleGithubRegister() {
     await githubAuthentication();
   }
 
   return (
     <>
-      <div className="mt-10 flex h-12 w-[358px] justify-center overflow-hidden rounded-md border border-white">
-        <div
-          title="Sign in using email/password"
-          className="flex w-full cursor-pointer items-center justify-center"
-          onClick={() => setMagicLink(false)}
-        >
-          <div
-            className={`flex h-[80%] w-[95%] cursor-pointer items-center justify-center rounded-md ${magicLink ? "bg-black text-white" : "bg-white text-black"}`}
-          >
-            <MdOutlinePassword />
-          </div>
-        </div>
+      <AuthMethodSwitcher />
 
-        <div
-          title="Sign in using email verification"
-          className="flex w-full cursor-pointer items-center justify-center"
-          onClick={() => setMagicLink(true)}
-        >
-          <div
-            className={`flex h-[80%] w-[95%] cursor-pointer items-center justify-center rounded-md ${magicLink ? "bg-white text-black" : "bg-black text-white"}`}
-          >
-            <IoIosMail />
-          </div>
-        </div>
-      </div>
       <form
         onSubmit={handleSubmit}
         className="flex flex-col items-center rounded-md p-3"
@@ -171,7 +147,7 @@ export default function RegisterForm() {
 
       <div
         className="flex w-80 cursor-pointer items-center justify-center gap-2 rounded-md border p-2"
-        onClick={handleGithubClick}
+        onClick={handleGithubRegister}
       >
         Sign up with
         <FaGithub />

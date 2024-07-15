@@ -31,7 +31,7 @@ export default function LoginForm() {
     setError("");
   }, [magicLink]);
 
-  async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setLoading(true);
     setError("");
@@ -102,11 +102,11 @@ export default function LoginForm() {
     setLoading(false);
   }
 
-  async function handleGithubClick() {
+  async function handleGithubLogin() {
     await githubAuthentication();
   }
 
-  async function resetPassword() {
+  async function handlePasswordReset() {
     const email = emailRef?.current?.value;
     setError("");
 
@@ -158,7 +158,7 @@ export default function LoginForm() {
       <div className={`my-2 h-4 text-lg text-red-500`}>{error}</div>
       <form
         className="mb-2 flex flex-col items-center justify-start rounded-md"
-        onSubmit={onSubmit}
+        onSubmit={handleSubmit}
       >
         <div className="my-2 flex flex-col">
           <input
@@ -186,7 +186,7 @@ export default function LoginForm() {
         <Button>{loading ? <LoadingSpinner /> : "Login"}</Button>
         {!magicLink && (
           <p
-            onClick={resetPassword}
+            onClick={handlePasswordReset}
             className={`cursor-pointer pt-2 underline ${passwordResetLoading ? "pointer-events-none" : "pointer-events-auto"}`}
           >
             Forgot password?
@@ -195,7 +195,7 @@ export default function LoginForm() {
       </form>
       <hr className="mb-5 mt-4 h-1 w-80"></hr>
 
-      <GithubAuth onClick={handleGithubClick} />
+      <GithubAuth onClick={handleGithubLogin} />
     </>
   );
 }
