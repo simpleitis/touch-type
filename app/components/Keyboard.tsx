@@ -23,9 +23,9 @@ const Keyboard = () => {
   }, []);
 
   return (
-    <div className="w-full ">
+    <div className="w-full">
       {keys.map((row, rowIndex) => (
-        <div key={rowIndex} className="mb-1 flex justify-center">
+        <div key={rowIndex} className="mb-1 flex items-center justify-center">
           {row.map((item) => (
             <Key
               value={item.value}

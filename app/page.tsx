@@ -6,7 +6,7 @@ export default function Home() {
   return (
     <div className="h-screen px-10 pt-5">
       <Header />
-      <div className="flex flex-col  items-center">
+      <div className="flex flex-col items-center">
         <ProgressStrip />
         <Keyboard />
       </div>
