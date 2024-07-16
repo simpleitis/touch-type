@@ -98,3 +98,19 @@ export const progressKeys = [
   "-",
   "=",
 ];
+
+export function generateParagraph(index: number, length = 100) {
+  const allowedLetters = progressKeys.slice(0, index);
+
+  let paragraph = "";
+  for (let i = 0; i < length; i++) {
+    if (Math.random() < 0.15) {
+      paragraph += " ";
+    } else {
+      const randomIndex = Math.floor(Math.random() * allowedLetters.length);
+      paragraph += allowedLetters[randomIndex].toLowerCase();
+    }
+  }
+
+  return paragraph;
+}
