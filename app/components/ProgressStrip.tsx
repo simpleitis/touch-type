@@ -22,7 +22,7 @@ export default async function ProgressStrip() {
         return (
           <div className="relative">
             {item}
-            <div className="bottom-0 left-0 w-full animate-[pulse_0.9s_ease-in-out_infinite] border-b-4 border-white"></div>
+            <div className="absolute left-0 w-full animate-[pulse_0.9s_ease-in-out_infinite] border-b-4 border-white"></div>
           </div>
         );
       }
