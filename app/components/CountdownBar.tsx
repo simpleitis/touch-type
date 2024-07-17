@@ -6,7 +6,7 @@ import { MainContext } from "../context/MainContext";
 const CountdownBar = () => {
   const [width, setWidth] = useState(100);
 
-  const { start } = useContext(MainContext);
+  const { start, setStart } = useContext(MainContext);
 
   useEffect(() => {
     let interval: ReturnType<typeof setInterval>;
@@ -17,13 +17,20 @@ const CountdownBar = () => {
             return prevWidth - 100 / 120;
           } else {
             clearInterval(interval);
+            
+            setTimeout(() => {
+              setStart(false);
+              setWidth(100)
+            }, 1000);
             return 0;
           }
         });
       }, 250);
     }
 
-    return () => clearInterval(interval);
+    return () => {
+      clearInterval(interval);
+    };
   }, [start]);
 
   return (
