@@ -1,17 +1,17 @@
 import React, { useState } from "react";
 
 interface MainContextType {
-  start: boolean;
-  setStart: React.Dispatch<React.SetStateAction<boolean>>;
-  hide: boolean;
-  setHide: React.Dispatch<React.SetStateAction<boolean>>;
+  startTimer: boolean;
+  setStartTimer: React.Dispatch<React.SetStateAction<boolean>>;
+  hideOverlay: boolean;
+  setHideOverlay: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const MainContext = React.createContext<MainContextType>({
-  start: false,
-  setStart: () => {},
-  hide: false,
-  setHide: () => {},
+  startTimer: false,
+  setStartTimer: () => {},
+  hideOverlay: true,
+  setHideOverlay: () => {},
 });
 
 export default function MainContextProvider({
@@ -19,11 +19,13 @@ export default function MainContextProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const [start, setStart] = useState(false);
-  const [hide, setHide] = useState(false);
+  const [startTimer, setStartTimer] = useState(false);
+  const [hideOverlay, setHideOverlay] = useState(true);
 
   return (
-    <MainContext.Provider value={{ start, setStart, hide, setHide }}>
+    <MainContext.Provider
+      value={{ startTimer, setStartTimer, hideOverlay, setHideOverlay }}
+    >
       {children}
     </MainContext.Provider>
   );
