@@ -26,7 +26,7 @@ const Keyboard = () => {
   }, []);
 
   return (
-    <div className="relative flex h-[540px] w-[1200px] items-center justify-center">
+    <div className="relative flex h-[440px] w-[1000px] items-center justify-center">
       {!start && (
         <div
           className="w-100% h-100% absolute bottom-0 left-0 right-0 top-0 z-10 flex cursor-pointer items-center justify-center rounded-xl bg-white bg-opacity-10 backdrop-blur-lg"
