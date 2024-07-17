@@ -8,12 +8,11 @@ interface KeyProps {
 }
 
 function Key({ display, isPressed, specialWidth }: KeyProps) {
-
   return (
     <div
-      className={`m-2 flex h-16 items-center justify-center rounded-lg border-2 border-white border-opacity-40 px-2 py-1 shadow-lg ${
+      className={`m-2 flex h-16 items-center justify-center rounded-full border-2 border-white border-opacity-40 px-2 py-1 shadow-lg ${
         specialWidth || "w-16"
-      } ${isPressed ? "bg-white bg-opacity-100 text-black" : "bg-white bg-opacity-20 text-white backdrop-blur-md"}`}
+      } ${isPressed ? "bg-white text-black" : "bg-transparent text-white"}`}
     >
       {display}
     </div>
