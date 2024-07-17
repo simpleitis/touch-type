@@ -99,7 +99,7 @@ export const progressKeys = [
   "=",
 ];
 
-export function generateParagraph(index: number, length = 100) {
+export function generateParagraph(index: number, length = 250) {
   const allowedLetters = progressKeys.slice(0, index);
 
   let paragraph = "";
