@@ -15,6 +15,9 @@ const Keyboard = () => {
     if (event.code === "Enter" && !start) {
       setStart(true);
     } else if (start) {
+      if (event.code === "Space") {
+        event.preventDefault();
+      }
       setPressedKey(event.code);
 
       if (practiseString[currentIndex] == event?.key.toLowerCase()) {
