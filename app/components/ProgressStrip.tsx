@@ -1,20 +1,22 @@
-import React from "react";
+"use client";
+
+import React, { useContext, useEffect } from "react";
 import { generateParagraph, progressKeys } from "../helpers/keyboard";
-import { auth } from "@/auth";
-import { getUserInfo } from "../actions/userInfo";
+import { MainContext } from "../context/MainContext";
 
-export default async function ProgressStrip() {
-  let currentIndex = 0;
+export default function ProgressStrip({ progress }: { progress: number }) {
+  const { practiseString, currentIndex, setPractiseString } =
+    useContext(MainContext);
 
-  const session = await auth();
+  useEffect(() => {
+    if (!!progress) {
+      const generatedParagraph = generateParagraph(progress);
 
-  const id = session?.user?.id as string;
+      setPractiseString(generatedParagraph);
+    }
+  }, [progress]);
 
-  const userInfoRes = await getUserInfo(id);
-
-  if (userInfoRes?.success && userInfoRes.userInfo?.progress) {
-    const practiseString = generateParagraph(userInfoRes.userInfo?.progress);
-
+  if (!!progress) {
     const practiseStringArray = practiseString.split("");
 
     const displayString = practiseStringArray.map((item, index) => {
@@ -32,7 +34,7 @@ export default async function ProgressStrip() {
       <>
         <div className="mt-10 flex w-[60%] flex-wrap items-center justify-center gap-2 text-xl font-semibold">
           {progressKeys.map((item, index) => {
-            if (index < userInfoRes.userInfo?.progress) {
+            if (index < progress) {
               return (
                 <div
                   key={item}
@@ -58,7 +60,7 @@ export default async function ProgressStrip() {
         </div>
       </>
     );
-  } else if (!userInfoRes?.success) {
-    return <p>Error loading progress!</p>;
+  } else {
+    return <p className="text-lg text-red-500">Error loading progress!</p>;
   }
 }
