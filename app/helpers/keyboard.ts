@@ -104,16 +104,27 @@ export function generateParagraph(index: number, length = 250) {
 
   let paragraph = "";
   let wordLength = 0;
+  let lastCharWasSpace = false;
 
   for (let i = 0; i < length; i++) {
-    if (wordLength >= 5 || Math.random() < 0.15) {
+    if (
+      i === 0 ||
+      ((wordLength >= 5 || Math.random() < 0.15) && !lastCharWasSpace)
+    ) {
       paragraph += " ";
       wordLength = 0;
+      lastCharWasSpace = true;
     } else {
       const randomIndex = Math.floor(Math.random() * allowedLetters.length);
       paragraph += allowedLetters[randomIndex].toLowerCase();
       wordLength++;
+      lastCharWasSpace = false;
     }
+  }
+
+  // Ensure the paragraph does not start with a space
+  if (paragraph[0] === " ") {
+    paragraph = paragraph.trimStart();
   }
 
   return paragraph;
