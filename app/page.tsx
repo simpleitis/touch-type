@@ -1,3 +1,4 @@
+import CountdownBar from "./components/CountdownBar";
 import Header from "./components/Header";
 import Keyboard from "./components/Keyboard";
 import MainContextWrapper from "./components/MainContextWrapper";
@@ -10,6 +11,7 @@ export default function Home() {
         <Header />
         <div className="flex flex-col items-center">
           <ProgressStrip />
+          <CountdownBar />
           <Keyboard />
         </div>
       </div>
