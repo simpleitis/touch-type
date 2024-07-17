@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 
-interface MyContextType {
+interface AuthContextType {
   magicLink: boolean;
   setMagicLink: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export const AuthContext = React.createContext<MyContextType>({
+export const AuthContext = React.createContext<AuthContextType>({
   magicLink: false,
   setMagicLink: () => {},
 });
