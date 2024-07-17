@@ -12,12 +12,13 @@ const Keyboard = () => {
     useContext(MainContext);
 
   const handleKeyDown = (event: KeyboardEvent) => {
+    if (event.code === "Space") {
+      event.preventDefault();
+    }
+
     if (event.code === "Enter" && !start) {
       setStart(true);
     } else if (start) {
-      if (event.code === "Space") {
-        event.preventDefault();
-      }
       setPressedKey(event.code);
 
       if (practiseString[currentIndex] == event?.key.toLowerCase()) {
