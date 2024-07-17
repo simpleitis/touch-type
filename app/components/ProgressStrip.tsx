@@ -26,11 +26,11 @@ export default async function ProgressStrip() {
           </div>
         );
       }
-      return <>{item}</>;
+      return <p key={index}>{item === " " ? "\u00A0" : item}</p>;
     });
     return (
       <>
-        <div className="mt-10 justify-center flex w-[60%] items-center flex-wrap gap-2 text-xl font-semibold">
+        <div className="mt-10 flex w-[60%] flex-wrap items-center justify-center gap-2 text-xl font-semibold">
           {progressKeys.map((item, index) => {
             if (index < userInfoRes.userInfo?.progress) {
               return (
@@ -53,7 +53,9 @@ export default async function ProgressStrip() {
             }
           })}
         </div>
-        <div className="m-10 flex justify-center items-center text-2xl tracking-widest">{displayString}</div>
+        <div className="m-10 flex w-[60%] flex-wrap items-center justify-center text-2xl tracking-widest">
+          {displayString}
+        </div>
       </>
     );
   } else if (!userInfoRes?.success) {
