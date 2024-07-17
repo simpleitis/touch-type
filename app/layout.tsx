@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
-import { Roboto_Mono } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const roboto = Roboto_Mono({subsets: ['latin']})
+const inter = Inter({ subsets: ["latin"], display: "swap" });
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -18,7 +18,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={roboto.className}>
+      <body className={inter.className}>
         {children}
         <ToastContainer
           position="bottom-center"
