@@ -21,13 +21,17 @@ export default function PractiseString({ progress }: { progress: number }) {
   const displayString = practiseStringArray.map((item, index) => {
     if (currentIndex === index) {
       return (
-        <div className="relative">
+        <div className="relative mb-2 flex min-w-4 justify-center">
           {item === " " ? "\u00A0" : item}
-          <div className="absolute left-0 w-full animate-[pulse_0.9s_ease-in-out_infinite] border-b-4 border-white"></div>
+          <div className="absolute -bottom-1 left-0 w-full animate-[pulse_0.9s_ease-in-out_infinite] border-b-4 border-white"></div>
         </div>
       );
     }
-    return <div>{item === " " ? "\u00A0" : item}</div>;
+    return (
+      <div className="mb-2 flex min-w-4 justify-center">
+        {item === " " ? "\u00A0" : item}
+      </div>
+    );
   });
 
   return (

@@ -8,7 +8,8 @@ import { MainContext } from "../context/MainContext";
 const Keyboard = () => {
   const [pressedKey, setPressedKey] = useState<string | null>(null);
 
-  const { start, setStart } = useContext(MainContext);
+  const { start, setStart, currentIndex, setCurrentIndex, practiseString } =
+    useContext(MainContext);
 
   const handleKeyDown = (event: KeyboardEvent) => {
     if (event.code === "Enter" && !start) {
@@ -16,6 +17,9 @@ const Keyboard = () => {
     } else if (start) {
       setPressedKey(event.code);
 
+      if (practiseString[currentIndex] == event?.key.toLowerCase()) {
+        setCurrentIndex((prevIndex) => prevIndex + 1);
+      }
       setTimeout(() => {
         setPressedKey(null);
       }, 100);
@@ -27,7 +31,7 @@ const Keyboard = () => {
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [start]);
+  }, [start, currentIndex]);
 
   return (
     <div className="relative flex h-[460px] w-[1200px] items-center justify-center">
