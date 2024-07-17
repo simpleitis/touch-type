@@ -103,12 +103,16 @@ export function generateParagraph(index: number, length = 250) {
   const allowedLetters = progressKeys.slice(0, index);
 
   let paragraph = "";
+  let wordLength = 0;
+
   for (let i = 0; i < length; i++) {
-    if (Math.random() < 0.15) {
+    if (wordLength >= 5 || Math.random() < 0.15) {
       paragraph += " ";
+      wordLength = 0;
     } else {
       const randomIndex = Math.floor(Math.random() * allowedLetters.length);
       paragraph += allowedLetters[randomIndex].toLowerCase();
+      wordLength++;
     }
   }
 
