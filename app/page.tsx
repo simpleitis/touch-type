@@ -12,7 +12,7 @@ export default async function Home() {
   const userInfoRes = await getUserInfo(id);
 
   // 2 is the index, so the first two letters would be unlocked in the ProgressStrip component
-  const progress = userInfoRes.userInfo?.progress ?? 0
+  const progress = userInfoRes.userInfo?.progress ?? ['Q', 'R']
 
   return (
     <MainContextWrapper>
