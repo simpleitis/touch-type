@@ -1,5 +1,3 @@
-"use client";
-
 import CountdownBar from "./CountdownBar";
 import Keyboard from "./Keyboard";
 import PractiseString from "./PractiseString";

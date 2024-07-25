@@ -9,8 +9,16 @@ import GlassSlab from "./GlassSlab";
 const Keyboard = ({ progress }: { progress: string[] | undefined }) => {
   const [pressedKey, setPressedKey] = useState<string | null>(null);
 
-  const { start, setStart, currentIndex, setCurrentIndex, practiseString } =
-    useContext(MainContext);
+  const {
+    start,
+    setStart,
+    currentIndex,
+    setCurrentIndex,
+    practiseString,
+    result,
+    setResult,
+    setWpm,
+  } = useContext(MainContext);
 
   const handleKeyDown = (event: KeyboardEvent) => {
     if (event.code === "Space") {
@@ -19,12 +27,25 @@ const Keyboard = ({ progress }: { progress: string[] | undefined }) => {
 
     if (event.code === "Enter" && !start) {
       setStart(true);
+      setResult({ correct: 0, wrong: 0 });
+      setWpm(0)
     } else if (start) {
       setPressedKey(event.code);
 
       if (practiseString[currentIndex] == event?.key.toLowerCase()) {
         setCurrentIndex((prevIndex) => prevIndex + 1);
+
+        if (event?.key !== " ") {
+          setResult((prev) => {
+            return { correct: prev.correct + 1, wrong: prev.wrong };
+          });
+        }
+      } else {
+        setResult((prev) => {
+          return { correct: prev.correct, wrong: prev.wrong + 1 };
+        });
       }
+
       setTimeout(() => {
         setPressedKey(null);
       }, 100);
@@ -33,6 +54,14 @@ const Keyboard = ({ progress }: { progress: string[] | undefined }) => {
 
   useEffect(() => {
     window.addEventListener("keydown", handleKeyDown);
+
+    if (!start) {
+      const durationInMinutes = 30 / 60;
+      const numberOfWords = result.correct / 5;
+      const calculatedWpm = numberOfWords / durationInMinutes;
+      setWpm(Math.round(calculatedWpm));
+    }
+
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
