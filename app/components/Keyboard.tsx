@@ -5,7 +5,7 @@ import { keys, specialKeys } from "../helpers/keyboard";
 import Key from "./Key";
 import { MainContext } from "../context/MainContext";
 
-const Keyboard = () => {
+const Keyboard = ({ progress }: { progress: string[] | undefined }) => {
   const [pressedKey, setPressedKey] = useState<string | null>(null);
 
   const { start, setStart, currentIndex, setCurrentIndex, practiseString } =
@@ -47,15 +47,30 @@ const Keyboard = () => {
       <div>
         {keys.map((row, rowIndex) => (
           <div key={rowIndex} className="mb-1 flex items-center justify-center">
-            {row.map((item) => (
-              <Key
-                value={item.value}
-                display={item.display}
-                key={item.value}
-                isPressed={pressedKey === item.value}
-                specialWidth={specialKeys[item.display]}
-              />
-            ))}
+            {row.map((item) => {
+              if (progress?.includes(item.display)) {
+                return (
+                  <Key
+                    value={item.value}
+                    display={item.display}
+                    key={item.value}
+                    isPressed={pressedKey === item.value}
+                    specialWidth={specialKeys[item.display]}
+                    colored={true}
+                  />
+                );
+              } else {
+                return (
+                  <Key
+                    value={item.value}
+                    display={item.display}
+                    key={item.value}
+                    isPressed={pressedKey === item.value}
+                    specialWidth={specialKeys[item.display]}
+                  />
+                );
+              }
+            })}
           </div>
         ))}
       </div>
