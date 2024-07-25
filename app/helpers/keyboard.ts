@@ -49,9 +49,7 @@ export const keys = [
     { value: "Comma", display: "," },
     { value: "Period", display: "." },
   ],
-  [
-    { value: "Space", display: "Space" },
-  ],
+  [{ value: "Space", display: "Space" }],
 ];
 
 export const specialKeys: { [key: string]: string } = {
@@ -99,32 +97,25 @@ export const progressKeys = [
   "=",
 ];
 
-export function generateParagraph(index: number, length = 250) {
-  const allowedLetters = progressKeys.slice(0, index);
-
+export function generateParagraph(
+  allowedLetters: string[],
+  length = 250,
+) {
   let paragraph = "";
   let wordLength = 0;
-  let lastCharWasSpace = false;
+  let lastCharWasSpace = true;
 
   for (let i = 0; i < length; i++) {
-    if (
-      i === 0 ||
-      ((wordLength >= 5 || Math.random() < 0.15) && !lastCharWasSpace)
-    ) {
+    if ((wordLength === 5 || Math.random() < 0.1) && !lastCharWasSpace) {
       paragraph += " ";
       wordLength = 0;
       lastCharWasSpace = true;
-    } else {
+    } else if (allowedLetters) {
       const randomIndex = Math.floor(Math.random() * allowedLetters.length);
       paragraph += allowedLetters[randomIndex].toLowerCase();
       wordLength++;
       lastCharWasSpace = false;
     }
-  }
-
-  // Ensure the paragraph does not start with a space
-  if (paragraph[0] === " ") {
-    paragraph = paragraph.trimStart();
   }
 
   return paragraph;
