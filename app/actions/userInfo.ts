@@ -22,7 +22,7 @@ export async function getUserInfo(id: string) {
     const createUserProgressRecordRes = await prisma.userProgress.create({
       data: {
         userId: parsedToken,
-        progress: 2,
+        progress: ["Q", "R"],
       },
     });
 
