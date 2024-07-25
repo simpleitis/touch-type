@@ -3,8 +3,13 @@
 import React, { useContext, useEffect } from "react";
 import { generateParagraph } from "../helpers/keyboard";
 import { MainContext } from "../context/MainContext";
+import { MdErrorOutline } from "react-icons/md";
 
-export default function PractiseString({ progress }: { progress: number }) {
+export default function PractiseString({
+  progress,
+}: {
+  progress: string[] | undefined;
+}) {
   const { currentIndex, practiseString, setPractiseString } =
     useContext(MainContext);
 
@@ -35,8 +40,15 @@ export default function PractiseString({ progress }: { progress: number }) {
   });
 
   return (
-    <div className="m-10 flex w-[60%] flex-wrap items-center justify-center text-2xl tracking-widest">
-      {displayString}
+    <div className="m-10 flex max-h-40 min-h-40 w-[60%] flex-wrap items-center justify-center text-2xl tracking-widest">
+      {progress ? (
+        displayString
+      ) : (
+        <p className="text-red-500 flex gap-2 items-center justify-center">
+          <MdErrorOutline />
+          Something went wrong! Please try again after sometime
+        </p>
+      )}
     </div>
   );
 }
