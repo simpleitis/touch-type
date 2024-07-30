@@ -1,19 +1,47 @@
+"use client";
+
+import { useContext, useEffect } from "react";
+import { getUserInfo } from "../actions/userInfo";
 import CountdownBar from "./CountdownBar";
 import Keyboard from "./Keyboard";
 import PractiseString from "./PractiseString";
+import { MainContext } from "../context/MainContext";
 
-export default function MainContent({
-  progress,
-}: {
-  progress: string[] | undefined;
-}) {
+interface MainContentType {
+  id: string;
+}
+
+export default function MainContent({ id }: MainContentType) {
+  const { setUserInfo } = useContext(MainContext);
+
+  async function fetchUserInfo() {
+    const userInfoRes = await getUserInfo(id);
+
+    if (userInfoRes?.success) {
+      const userInfo = {
+        id: userInfoRes?.userInfo?.id,
+        userId: userInfoRes?.userInfo?.userId,
+        progress: userInfoRes.userInfo?.progress as string[] | undefined,
+        bestWpm: userInfoRes?.userInfo?.wpm,
+      };
+
+      setUserInfo(userInfo);
+    }
+  }
+
+  useEffect(() => {
+    if (id) {
+      fetchUserInfo();
+    }
+  }, [id]);
+
   return (
     <>
-      <PractiseString progress={progress} />
+      <PractiseString />
 
       <CountdownBar />
 
-      <Keyboard progress={progress} />
+      <Keyboard />
     </>
   );
 }

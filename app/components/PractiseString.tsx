@@ -5,21 +5,17 @@ import { generateParagraph } from "../helpers/keyboard";
 import { MainContext } from "../context/MainContext";
 import { MdErrorOutline } from "react-icons/md";
 
-export default function PractiseString({
-  progress,
-}: {
-  progress: string[] | undefined;
-}) {
-  const { currentIndex, practiseString, setPractiseString } =
+export default function PractiseString() {
+  const { currentIndex, practiseString, setPractiseString, userInfo } =
     useContext(MainContext);
 
   useEffect(() => {
-    if (!!progress) {
-      const generatedParagraph = generateParagraph(progress);
+    if (!!userInfo?.progress) {
+      const generatedParagraph = generateParagraph(userInfo?.progress);
 
       setPractiseString(generatedParagraph);
     }
-  }, [progress]);
+  }, [userInfo?.progress]);
 
   const practiseStringArray = practiseString.split("");
 
@@ -41,10 +37,10 @@ export default function PractiseString({
 
   return (
     <div className="m-10 flex max-h-40 min-h-40 w-[60%] flex-wrap items-center justify-center text-2xl tracking-widest">
-      {progress ? (
+      {userInfo?.progress ? (
         displayString
       ) : (
-        <p className="text-red-500 flex gap-2 items-center justify-center">
+        <p className="flex items-center justify-center gap-2 text-red-500">
           <MdErrorOutline />
           Something went wrong! Please try again after sometime
         </p>

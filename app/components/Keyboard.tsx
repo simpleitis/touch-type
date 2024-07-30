@@ -6,7 +6,7 @@ import Key from "./Key";
 import { MainContext } from "../context/MainContext";
 import GlassSlab from "./GlassSlab";
 
-const Keyboard = ({ progress }: { progress: string[] | undefined }) => {
+const Keyboard = () => {
   const [pressedKey, setPressedKey] = useState<string | null>(null);
 
   const {
@@ -18,6 +18,7 @@ const Keyboard = ({ progress }: { progress: string[] | undefined }) => {
     result,
     setResult,
     setWpm,
+    userInfo,
   } = useContext(MainContext);
 
   const handleKeyDown = (event: KeyboardEvent) => {
@@ -28,7 +29,7 @@ const Keyboard = ({ progress }: { progress: string[] | undefined }) => {
     if (event.code === "Enter" && !start) {
       setStart(true);
       setResult({ correct: 0, wrong: 0 });
-      setWpm(0)
+      setWpm(0);
     } else if (start) {
       setPressedKey(event.code);
 
@@ -75,7 +76,7 @@ const Keyboard = ({ progress }: { progress: string[] | undefined }) => {
         {keys.map((row, rowIndex) => (
           <div key={rowIndex} className="mb-1 flex items-center justify-center">
             {row.map((item) => {
-              if (progress?.includes(item.display)) {
+              if (userInfo?.progress?.includes(item.display)) {
                 return (
                   <Key
                     value={item.value}
