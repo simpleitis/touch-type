@@ -17,11 +17,11 @@ export default function MainContent({ id }: MainContentType) {
   async function fetchUserInfo() {
     const userInfoRes = await getUserInfo(id);
 
-    if (userInfoRes?.success) {
+    if (userInfoRes?.userInfo) {
       const userInfo = {
         id: userInfoRes?.userInfo?.id,
         userId: userInfoRes?.userInfo?.userId,
-        progress: userInfoRes.userInfo?.progress as string[] | undefined,
+        progress: userInfoRes.userInfo?.progress as string[],
         bestWpm: userInfoRes?.userInfo?.wpm,
       };
 

@@ -8,7 +8,7 @@ import {
   magicLinkSignUpSchema,
   signInSchema,
   signUpSchema,
-  tokenSchema,
+  idSchema,
 } from "@/lib/zod";
 import { Prisma } from "@prisma/client";
 import { sendChangePasswordEmail } from "@/lib/nodemailer";
@@ -226,7 +226,7 @@ export async function setPassword({ email, password, token }: SetPasswordInfo) {
       parsedPassword: password,
     });
 
-    const { parsedToken } = await tokenSchema.parseAsync({
+    const { parsedToken } = await idSchema.parseAsync({
       parsedToken: token,
     });
 

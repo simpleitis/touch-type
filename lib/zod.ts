@@ -1,4 +1,4 @@
-import { object, string } from "zod";
+import { number, object, string } from "zod";
 
 export const signInSchema = object({
   parsedEmail: string({ required_error: "Email is required" })
@@ -56,6 +56,10 @@ export const setPasswordSchema = object({
     .max(32, "Confirm password must be less than 32 characters"),
 });
 
-export const tokenSchema = object({
+export const idSchema = object({
   parsedToken: string({ required_error: "Token is required" }).uuid(),
+});
+
+export const numberSchema = object({
+  parsedNumber: number({ required_error: "Value required" }),
 });

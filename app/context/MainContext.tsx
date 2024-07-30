@@ -17,17 +17,17 @@ interface MainContextType {
   wpm: number;
   setWpm: React.Dispatch<React.SetStateAction<number>>;
   userInfo: {
-    id: string | undefined;
-    userId: string | undefined;
-    progress: string[] | undefined;
-    bestWpm: number | undefined;
+    id: string;
+    userId: string;
+    progress: string[];
+    bestWpm: number;
   };
   setUserInfo: React.Dispatch<
     React.SetStateAction<{
-      id: string | undefined;
-      userId: string | undefined;
-      progress: string[] | undefined;
-      bestWpm: number | undefined;
+      id: string;
+      userId: string;
+      progress: string[];
+      bestWpm: number;
     }>
   >;
 }
@@ -44,10 +44,10 @@ export const MainContext = React.createContext<MainContextType>({
   wpm: 0,
   setWpm: () => {},
   userInfo: {
-    id: undefined,
-    userId: undefined,
-    progress: undefined,
-    bestWpm: undefined,
+    id: "",
+    userId: "",
+    progress: ["R", "Q"],
+    bestWpm: 0,
   },
   setUserInfo: () => {},
 });
@@ -63,10 +63,10 @@ export default function MainContextProvider({
   const [result, setResult] = useState({ correct: 0, wrong: 0 });
   const [wpm, setWpm] = useState(0);
   const [userInfo, setUserInfo] = useState({
-    id: "" as string | undefined,
-    userId: "" as string | undefined,
-    progress: ["R", "Q"] as string[] | undefined,
-    bestWpm: 0 as number | undefined,
+    id: "",
+    userId: "",
+    progress: ["R", "Q"],
+    bestWpm: 0,
   });
 
   return (
