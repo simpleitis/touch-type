@@ -58,11 +58,11 @@ export const specialKeys: { [key: string]: string } = {
 
 export const progressKeys = [
   "Q",
+  "R",
   "T",
   "D",
   "H",
   "A",
-  "R",
   "Z",
   "F",
   "G",
