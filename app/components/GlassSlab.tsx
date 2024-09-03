@@ -58,7 +58,7 @@ export default function GlassSlab() {
         toast.error("Something went wrong!");
       }
     }
-      
+
     // Update user's progress array with the next element for practise
     else if (wpm <= userInfo?.bestWpm && wpm >= 35) {
       const updateRes = await updateUserProgress(
@@ -79,7 +79,7 @@ export default function GlassSlab() {
     }
   }
 
-// Updating current wpm animation in meter
+  // Updating current wpm animation in meter
   useEffect(() => {
     let interval: NodeJS.Timeout;
     if (wpmProgress < wpm) {
@@ -93,7 +93,7 @@ export default function GlassSlab() {
     };
   }, [wpmProgress, wpm]);
 
-// Update user details according to new data
+  // Update user details according to new data
   useEffect(() => {
     if (
       (userInfo?.bestWpm || userInfo?.bestWpm === 0) &&
@@ -114,32 +114,24 @@ export default function GlassSlab() {
             strokeWidth={6}
             trailWidth={6}
             strokeColor={{
-              "0%": "#fbbf24",
-              "25%": "#bef264",
-              "50%": "#84cc16",
-              "75%": "#16a34a",
+              "0%": "#16a34a",
+              "25%": "#84cc16",
+              "50%": "#a8d408",
+              "75%": "#e11d48",
             }}
             trailColor="rgba(255, 255, 255, 0.1)"
           />
           <div className="absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 transform flex-col items-center justify-center text-2xl">
-            <p className="text-6xl font-bold text-lime-400">{wpm}</p>
-            <p>WPM</p>
+            <p className="text-6xl font-bold">{wpm}</p>
+            <p className="text-lime-400">WPM</p>
 
-            <div className="absolute top-24 flex rounded-md border text-sm">
-              <p className="flex w-24 items-center justify-center border-r p-1">
-                Best:
-                <span className="text-lg font-bold text-lime-500">
-                  {wpm >= userInfo?.bestWpm ? wpm : userInfo?.bestWpm}
-                </span>
-              </p>
-
-              <p className="flex w-24 items-center justify-center border-l p-1">
-                Acc:
-                <span
-                  className="text-lg font-bold text-lime-500"
-                  title="Accuracy"
-                >
-                  {accuracy}
+            <div className="absolute top-24 flex justify-center rounded-md align-baseline text-sm underline underline-offset-4">
+              <p className="flex w-24 items-center justify-center p-1">
+                <span>
+                  Best:
+                  <span className="text-lg font-bold text-lime-500">
+                    {wpm >= userInfo?.bestWpm ? wpm : userInfo?.bestWpm}
+                  </span>
                 </span>
               </p>
             </div>
@@ -149,21 +141,21 @@ export default function GlassSlab() {
         <div className="relative h-80 w-80">
           <Circle
             className="relative"
-            percent={wpmProgress}
+            percent={(accuracy / 100) * 100}
             gapDegree={70}
             strokeWidth={6}
             trailWidth={6}
             strokeColor={{
-              "0%": "#fbbf24",
-              "25%": "#bef264",
-              "50%": "#84cc16",
-              "75%": "#16a34a",
+              "0%": "#16a34a",
+              "25%": "#84cc16",
+              "50%": "#a8d408",
+              "75%": "#e11d48",
             }}
             trailColor="rgba(255, 255, 255, 0.1)"
           />
           <div className="absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 transform flex-col items-center justify-center text-2xl">
-            <p className="text-6xl font-bold">2</p>
-            <p>OF 60</p>
+            <p className="text-6xl font-bold">{accuracy}</p>
+            <p className="text-2xl text-lime-400">Accuracy</p>
           </div>
         </div>
       </div>
