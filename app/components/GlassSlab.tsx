@@ -104,7 +104,7 @@ export default function GlassSlab() {
   }, [wpm]);
 
   return (
-    <div className="w-100% h-100% absolute bottom-0 left-0 right-0 top-0 z-10 flex flex-col items-center justify-evenly rounded-xl bg-white bg-opacity-10 p-2 backdrop-blur">
+    <div className="w-100% h-100% absolute bottom-0 left-0 right-0 top-0 z-10 flex flex-col items-center justify-evenly rounded-xl bg-white bg-opacity-[0.04] p-2 backdrop-blur">
       <div className="flex h-[70%] w-full justify-evenly">
         <div className="relative h-80 w-80">
           <Circle

@@ -35,7 +35,9 @@ const CountdownBar = () => {
   }, [start]);
 
   return (
-    <div className="h-3 w-[1200px] rounded-full border-2 border-white">
+    <div
+      className={`h-3 w-[1200px] rounded-full border-2 border-white ${start ? "opacity-100" : "opacity-0"} `}
+    >
       <div
         className="h-full rounded-r-full bg-white duration-500 ease-linear"
         style={{ width: `${width}%` }}
