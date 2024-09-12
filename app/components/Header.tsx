@@ -8,8 +8,6 @@ interface Header {
   };
 }
 
-
-
 export default function Header({ user }: Header) {
   return (
     <div className="flex w-full flex-col items-center">
