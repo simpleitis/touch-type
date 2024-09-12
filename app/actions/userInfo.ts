@@ -1,7 +1,7 @@
 "use server";
 
 import { numberSchema, idSchema } from "@/lib/zod";
-import { prisma } from "@/utils/db";
+import { prisma } from "@/lib/db";
 import { progressKeys } from "../helpers/keyboard";
 
 export async function getUserInfo(id: string) {

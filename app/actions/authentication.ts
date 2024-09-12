@@ -1,7 +1,7 @@
 "use server";
 
 import { signIn } from "../../auth";
-import { prisma } from "@/utils/db";
+import { prisma } from "@/lib/db";
 import { comparePassword, hashPassword } from "../helpers/authHelpers";
 import {
   emailSchema,
