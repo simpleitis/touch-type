@@ -1,12 +1,24 @@
 import React from "react";
-import LogoutButton from "./LogoutButton";
+import ProfileSection from "./ProfileSection";
 
-export default function Header() {
+interface Header {
+  user: {
+    name: string;
+    image: string | null | undefined;
+  };
+}
+
+
+
+export default function Header({ user }: Header) {
   return (
     <div className="flex w-full flex-col items-center">
-      <div className="flex mt-2 h-20 w-full items-center justify-between border-4 border-white p-6 backdrop-blur-lg rounded-full">
+      <div className="mt-2 flex h-20 w-full items-center justify-between rounded-full border-4 border-white p-6 backdrop-blur-lg">
         <p className="text-4xl font-extrabold">touchtype_</p>
-        <LogoutButton />
+
+        <div>
+          <ProfileSection user={user} />
+        </div>
       </div>
     </div>
   );

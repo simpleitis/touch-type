@@ -8,11 +8,12 @@ export default async function Home() {
   const session = await auth();
 
   const id = session?.user?.id as string;
+  const user = { name: String(session?.user?.name), image: session?.user?.image };
 
   return (
     <MainContextWrapper>
       <div className="relative h-screen px-5">
-        <Header />
+        <Header user={user} />
         <div className="flex flex-col items-center">
           <MainContent id={id} />
         </div>
