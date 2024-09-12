@@ -29,7 +29,7 @@ export default function HowToDrawer() {
             <CardWrapper
               title="1"
               subTitle="Deposit money"
-              description="Go to profile section and deposit an amount which you would like to keep locked until you reach a certain goal."
+              description="Go to account section and deposit an amount which you would like to keep locked until you reach a certain goal."
             />
 
             <CardWrapper
