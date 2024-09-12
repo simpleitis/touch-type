@@ -41,7 +41,7 @@ export default function HowToDrawer() {
             <CardWrapper
               title="3"
               subTitle="Progress according to your result"
-              description="Initially only two letters would be unlocked"
+              description="Initially only two letters would be unlocked and as you are able to reach a minimum of 35wpm with current set of letters. The next letter gets unlocked."
             />
 
             <CardWrapper
