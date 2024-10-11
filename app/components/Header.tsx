@@ -3,8 +3,10 @@ import ProfileSection from "./ProfileSection";
 
 interface Header {
   user: {
+    id: string;
     name: string;
-    image: string | null | undefined;
+    image: string;
+    email: string;
   };
 }
 
