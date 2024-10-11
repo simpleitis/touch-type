@@ -18,12 +18,12 @@ model User {
   email                    String  @unique
   name                     String?
   password                 String? 
-  username                 String? @unique
   emailVerified            DateTime?
   image                    String?
   Session                  Session[]
   Account                  Account?
   UserProgress             UserProgress?
+  UserOrders               UserOrders[]
  
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -79,4 +79,12 @@ model UserProgress {
   userId                   String  @unique
   progress                 Json
   wpm                      Int     
+}
+
+model UserOrders {
+  id                       String  @id
+  userId                   String
+  amount                   Int
+  payed                    String
+  user                     User   @relation(fields: [userId], references: [id])
 }
