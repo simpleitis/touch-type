@@ -85,6 +85,6 @@ model UserOrders {
   id                       String  @id
   userId                   String
   amount                   Int
-  payed                    String
+  status                   String
   user                     User   @relation(fields: [userId], references: [id])
 }
