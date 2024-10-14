@@ -25,7 +25,7 @@ export default function PaymentProcessing({ params }: PaymentProcessingParams) {
     if (paymentInfo?.status !== paymentStates.paymentPending) {
       if (paymentInfo?.status === paymentStates.paymentSuccess) {
         setLoop(false);
-        setStatusImageSrc("/tick.lottie");
+        setStatusImageSrc("/success.lottie");
       } else if (paymentInfo?.status === paymentStates.paymentFailure) {
       }
 
