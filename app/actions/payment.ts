@@ -2,6 +2,7 @@
 
 import { prisma } from "@/lib/db";
 import { Cashfree } from "cashfree-pg";
+import { paymentStates } from "../helpers/paymentHelpers";
 
 Cashfree.XClientId = process.env.CASHFREE_APP_ID;
 Cashfree.XClientSecret = process.env.CASHFREE_SECRET;
@@ -36,7 +37,7 @@ export async function createOrder(data: CreateOrderData) {
           id: res.data.order_id,
           userId: data.customer_id,
           amount: data.order_amount,
-          status: "PENDING",
+          status: paymentStates.paymentPending,
         },
       });
       return {
