@@ -1,8 +1,22 @@
+import { prisma } from "@/lib/db";
+
 export async function POST(request: Request) {
   try {
-    const data = await request.json();
-    console.log("This is the data: ", data);
-    // Process the webhook payload
+    const webHookData = await request.json();
+
+    if (
+      webHookData?.data?.order?.order_id &&
+      webHookData?.data?.payment?.payment_status
+    ) {
+      const dbRes = await prisma.userOrders.update({
+        where: {
+          id: webHookData?.data?.order?.order_id,
+        },
+        data: {
+          status: webHookData?.data?.payment?.payment_status,
+        },
+      });
+    }
   } catch (error: any) {
     return new Response(`Webhook error: ${error.message}`, {
       status: 400,

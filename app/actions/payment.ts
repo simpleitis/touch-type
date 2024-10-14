@@ -1,5 +1,6 @@
 "use server";
 
+import { prisma } from "@/lib/db";
 import { Cashfree } from "cashfree-pg";
 
 Cashfree.XClientId = process.env.CASHFREE_APP_ID;
@@ -15,7 +16,7 @@ interface CreateOrderData {
 }
 
 export async function createOrder(data: CreateOrderData) {
-  var request = {
+  const request = {
     order_amount: data.order_amount,
     order_currency: "INR",
     customer_details: {
@@ -24,36 +25,42 @@ export async function createOrder(data: CreateOrderData) {
       customer_email: data.customer_email,
       customer_phone: "9999999999",
     },
-    order_meta: {
-      return_url: `${process.env.AUTH_URL}`,
-    },
     order_note: "",
   };
 
   try {
     const res = await Cashfree.PGCreateOrder("2023-08-01", request);
-    if (res.status === 200) {
-      return { success: true, session_id: res?.data?.payment_session_id };
+    if (res.status === 200 && res.data.order_id) {
+      const dbRes = await prisma.userOrders.create({
+        data: {
+          id: res.data.order_id,
+          userId: data.customer_id,
+          amount: data.order_amount,
+          status: "PENDING",
+        },
+      });
+      return {
+        success: true,
+        session_id: res?.data?.payment_session_id,
+        order_id: res.data.order_id,
+      };
     } else {
       return { success: false };
     }
   } catch (error: any) {
-    console.error("Error setting up order request:", error.response.data);
+    console.error("Error setting up order request:", error.message);
     return { success: false };
   }
 }
 
-// export async function verifyPayment() {
-//   try {
-//     cosnt res = await Cashfree.PGOrderFetchPayments("2023-08-01", "devstudio_83880788")
-//   } catch (error) {
-    
-//   }
+export async function checkOrderStatus(id: string) {
+  try {
+    const res = await prisma.userOrders.findUnique({
+      where: {
+        id: id,
+      },
+    });
 
-//   .then((response) => {
-//       console.log('Order fetched successfully:', response.data);
-//   }).catch((error) => {
-//       console.error('Error:', error.response.data.message);
-//   });
-// }
-
+    return { success: true, status: res?.status };
+  } catch (error) {}
+}

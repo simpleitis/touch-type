@@ -51,10 +51,11 @@ export default function ProfileSection({ user }: ProfileSection) {
     const res = await createOrder(data);
 
     // Load checkout
-    if (res?.success && res?.session_id) {
+    if (res?.success && res?.session_id && res?.order_id) {
       const checkOutResponse = await cashfree!.checkout({
         paymentSessionId: res?.session_id,
-        redirectTarget: "_modal",
+        redirectTarget: "_self",
+        returnUrl: `${process.env.NEXT_PUBLIC_BASE_URL}/payment-processing/{order_id}`,
       });
 
       if (checkOutResponse.error) {
