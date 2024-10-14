@@ -1,5 +1,5 @@
 export const paymentStates = {
-  paymentSuccess: "",
+  paymentSuccess: "SUCCESS",
   paymentPending: "PENDING",
-  paymentFailure: "",
+  paymentFailure: "FAILED",
 };
