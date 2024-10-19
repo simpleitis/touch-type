@@ -44,7 +44,7 @@ export default function GlassSlab() {
         const unlockedKey = progressArray[progressArray.length - 1];
         toast.success(
           <div className="flex items-center gap-2">
-            <p className="flex h-2 w-2 items-center justify-center rounded-lg border border-white p-4">
+            <p className="flex h-2 w-2 items-center justify-center rounded-xl border border-white p-4">
               {unlockedKey}
             </p>
             <p>unlocked!</p>
@@ -90,7 +90,7 @@ export default function GlassSlab() {
         const unlockedKey = progressArray[progressArray.length - 1];
         toast.success(
           <div className="flex items-center gap-2">
-            <p className="flex h-2 w-2 items-center justify-center rounded-lg border border-white p-4">
+            <p className="flex h-2 w-2 items-center justify-center rounded-xl border border-white p-4">
               {unlockedKey}
             </p>
             <p>unlocked!</p>
