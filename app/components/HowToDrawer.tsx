@@ -10,6 +10,7 @@ import { Button } from "@/app/components/ui/button";
 import { IoBookOutline } from "react-icons/io5";
 import CardWrapper from "./CardWrapper";
 import Image from "next/image";
+import { threshHoldSpeed } from "../helpers/keyboard";
 
 export default function HowToDrawer() {
   return (
@@ -41,7 +42,7 @@ export default function HowToDrawer() {
             <CardWrapper
               title="3"
               subTitle="Progress according to your result"
-              description="Initially only two letters would be unlocked and as you are able to reach a minimum of 35wpm with current set of letters. The next letter gets unlocked."
+              description={`Initially only two letters would be unlocked and as you are able to reach a minimum of ${threshHoldSpeed}wpm with current set of letters. The next letter gets unlocked.`}
             />
 
             <CardWrapper
@@ -51,7 +52,7 @@ export default function HowToDrawer() {
             />
           </div>
 
-          <div className="mt-10 flex flex-col items-center justify-center rounded-lg border w-[86vw]">
+          <div className="mt-10 flex w-[86vw] flex-col items-center justify-center rounded-lg border">
             <div className="rounded-full">
               <p className="text-4xl font-bold">Finger placement</p>
               <p className="text-slate-400">

@@ -8,6 +8,7 @@ import {
   updateUserWpmAndProgress,
 } from "../actions/userInfo";
 import { toast } from "react-toastify";
+import { threshHoldSpeed } from "../helpers/keyboard";
 
 export default function GlassSlab() {
   const [wpmProgress, setWpmProgress] = useState(0);
@@ -24,7 +25,7 @@ export default function GlassSlab() {
 
   async function updateUserProgressData() {
     // Update user's best score in wpm and extend the progress array with the next element for practise
-    if (wpm > userInfo?.bestWpm && wpm >= 35) {
+    if (wpm > userInfo?.bestWpm && wpm >= threshHoldSpeed) {
       const updateRes = await updateUserWpmAndProgress(
         userInfo?.id,
         wpm,
@@ -38,13 +39,24 @@ export default function GlassSlab() {
           progress: updateRes.userInfo?.progress as string[],
           bestWpm: updateRes.userInfo?.wpm,
         });
+
+        const progressArray = updateRes.userInfo?.progress as string[];
+        const unlockedKey = progressArray[progressArray.length - 1];
+        toast.success(
+          <div className="flex items-center gap-2">
+            <p className="flex h-2 w-2 items-center justify-center rounded-lg border border-white p-4">
+              {unlockedKey}
+            </p>
+            <p>unlocked!</p>
+          </div>,
+        );
       } else {
         toast.error("Something went wrong!");
       }
     }
 
     // Update user's best score in wpm in the DB
-    else if (wpm > userInfo?.bestWpm && wpm < 35) {
+    else if (wpm > userInfo?.bestWpm && wpm < threshHoldSpeed) {
       const updateRes = await updateUserWpm(userInfo?.id, wpm);
 
       if (updateRes?.success && updateRes?.userInfo) {
@@ -60,7 +72,7 @@ export default function GlassSlab() {
     }
 
     // Update user's progress array with the next element for practise
-    else if (wpm <= userInfo?.bestWpm && wpm >= 35) {
+    else if (wpm <= userInfo?.bestWpm && wpm >= threshHoldSpeed) {
       const updateRes = await updateUserProgress(
         userInfo?.id,
         userInfo?.progress,
@@ -73,6 +85,17 @@ export default function GlassSlab() {
           progress: updateRes.userInfo?.progress as string[],
           bestWpm: updateRes.userInfo?.wpm,
         });
+
+        const progressArray = updateRes.userInfo?.progress as string[];
+        const unlockedKey = progressArray[progressArray.length - 1];
+        toast.success(
+          <div className="flex items-center gap-2">
+            <p className="flex h-2 w-2 items-center justify-center rounded-lg border border-white p-4">
+              {unlockedKey}
+            </p>
+            <p>unlocked!</p>
+          </div>,
+        );
       } else {
         toast.error("Something went wrong!");
       }
@@ -96,8 +119,9 @@ export default function GlassSlab() {
   // Update user details according to new data
   useEffect(() => {
     if (
-      (userInfo?.bestWpm || userInfo?.bestWpm === 0) &&
-      (wpm > userInfo?.bestWpm || wpm > 35)
+      wpm > userInfo?.bestWpm ||
+      wpm > threshHoldSpeed ||
+      userInfo?.bestWpm === 0
     ) {
       updateUserProgressData();
     }

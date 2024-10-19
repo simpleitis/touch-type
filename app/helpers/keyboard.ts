@@ -1,3 +1,5 @@
+export const threshHoldSpeed = 35;
+
 export const keys = [
   [
     { value: "Digit1", display: "1" },
@@ -97,10 +99,7 @@ export const progressKeys = [
   "=",
 ];
 
-export function generateParagraph(
-  allowedLetters: string[],
-  length = 250,
-) {
+export function generateParagraph(allowedLetters: string[], length = 250) {
   let paragraph = "";
   let wordLength = 0;
   let lastCharWasSpace = true;
