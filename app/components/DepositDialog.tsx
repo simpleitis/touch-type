@@ -22,15 +22,10 @@ import { createOrder } from "../actions/payment";
 // @ts-ignore
 import { load } from "@cashfreepayments/cashfree-js";
 import { toast } from "react-toastify";
-import {
-  Dispatch,
-  SetStateAction,
-  useState,
-  useCallback,
-  useEffect,
-} from "react";
+import { Dispatch, SetStateAction, useState, useContext } from "react";
 import { positiveNumberSchema, stringSchema } from "@/lib/zod";
 import { prisma } from "@/lib/db";
+import { MainContext } from "../context/MainContext";
 
 interface DepositDialogProps {
   user: {
@@ -47,6 +42,9 @@ export function DepositDialog({ user, open, setOpen }: DepositDialogProps) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [amount, setAmount] = useState<string>("10");
   const [withdrawCondition, setWithdrawCondition] = useState<string>("");
+
+  const { userInfo } = useContext(MainContext);
+  const progressLength = userInfo?.progress.length;
 
   const handleDeposit = async () => {
     setIsLoading(true);
@@ -133,14 +131,30 @@ export function DepositDialog({ user, open, setOpen }: DepositDialogProps) {
                 <SelectValue placeholder="Select withdraw condition" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="5">After unlocking 5 keys</SelectItem>
-                <SelectItem value="10">After unlocking 10 keys</SelectItem>
-                <SelectItem value="15">After unlocking 15 keys</SelectItem>
-                <SelectItem value="20">After unlocking 20 keys</SelectItem>
-                <SelectItem value="25">After unlocking 25 keys</SelectItem>
-                <SelectItem value="30">After unlocking 30 keys</SelectItem>
-                <SelectItem value="35">After unlocking 35 keys</SelectItem>
-                <SelectItem value="38">After unlocking all keys</SelectItem>
+                <SelectItem value="5" disabled={progressLength >= 5}>
+                  After unlocking 5 keys
+                </SelectItem>
+                <SelectItem value="10" disabled={progressLength >= 10}>
+                  After unlocking 10 keys
+                </SelectItem>
+                <SelectItem value="15" disabled={progressLength >= 15}>
+                  After unlocking 15 keys
+                </SelectItem>
+                <SelectItem value="20" disabled={progressLength >= 20}>
+                  After unlocking 20 keys
+                </SelectItem>
+                <SelectItem value="25" disabled={progressLength >= 25}>
+                  After unlocking 25 keys
+                </SelectItem>
+                <SelectItem value="30" disabled={progressLength >= 30}>
+                  After unlocking 30 keys
+                </SelectItem>
+                <SelectItem value="35" disabled={progressLength >= 35}>
+                  After unlocking 35 keys
+                </SelectItem>
+                <SelectItem value="38" disabled={progressLength >= 38}>
+                  After unlocking all keys
+                </SelectItem>
               </SelectContent>
             </Select>
           </div>
