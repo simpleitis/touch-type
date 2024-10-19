@@ -19,6 +19,7 @@ export default async function Home() {
     <MainContextWrapper>
       <div className="relative h-screen px-5">
         <Header user={user} />
+
         <div className="flex flex-col items-center">
           <MainContent id={id} />
         </div>

@@ -63,3 +63,16 @@ export const idSchema = object({
 export const numberSchema = object({
   parsedNumber: number({ required_error: "Value required" }),
 });
+
+export const positiveNumberSchema = object({
+  parsedNumber: number({ required_error: "Value is required" }).gt(
+    0,
+    "Please enter a valid amount",
+  ),
+});
+
+export const stringSchema = object({
+  parsedString: string({
+    required_error: "Value is required",
+  }).min(1, "Please select a withdraw condition"),
+});

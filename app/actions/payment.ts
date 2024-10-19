@@ -14,6 +14,7 @@ interface CreateOrderData {
   customer_name: string;
   customer_email: string;
   customer_phone?: string;
+  withdraw_condition: string;
 }
 
 export async function createOrder(data: CreateOrderData) {
@@ -37,6 +38,7 @@ export async function createOrder(data: CreateOrderData) {
           id: res.data.order_id,
           userId: data.customer_id,
           amount: data.order_amount,
+          condition: data.withdraw_condition,
           status: paymentStates.paymentPending,
         },
       });
